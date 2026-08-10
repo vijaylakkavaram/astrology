@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Kundali Generator</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🪔 South Indian Kundali Generator</h1>
+
+
+    <!-- ========================= -->
+    <!-- FORM -->
+    <!-- ========================= -->
+
+    <form id="kundaliForm">
+
+
+        <!-- Name / Date / Time -->
+
+        <div class="row">
+
+            <input
+                type="text"
+                id="name"
+                placeholder="Name"
+                required>
+
+
+            <input
+                type="date"
+                id="date"
+                required>
+
+
+            <input
+                type="time"
+                id="time"
+                required>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- PLACE / LOCATION -->
+        <!-- ========================= -->
+
+        <div class="row">
+
+            <input
+                type="text"
+                id="place"
+                list="indiaPlaces"
+                placeholder="Select / enter place"
+                autocomplete="off">
+
+
+            <datalist id="indiaPlaces">
+
+                <option value="Bengaluru">
+                <option value="Hyderabad">
+                <option value="Chennai">
+                <option value="Tirupati">
+                <option value="Mumbai">
+                <option value="Delhi">
+                <option value="Pune">
+                <option value="Kolkata">
+                <option value="Ahmedabad">
+                <option value="Jaipur">
+                <option value="Lucknow">
+                <option value="Kochi">
+                <option value="Bhopal">
+                <option value="Bhubaneswar">
+                <option value="Patna">
+                <option value="Ranchi">
+                <option value="Guwahati">
+                <option value="Chandigarh">
+                <option value="Dehradun">
+                <option value="Panaji">
+                <option value="Srinagar">
+
+            </datalist>
+
+
+            <button
+                type="button"
+                id="locationBtn">
+
+                📍 Use My Location
+
+            </button>
+
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- LATITUDE / LONGITUDE -->
+        <!-- ========================= -->
+
+        <div class="row">
+
+            <input
+                type="number"
+                id="latitude"
+                placeholder="Latitude"
+                step="0.000001"
+                required>
+
+
+            <input
+                type="number"
+                id="longitude"
+                placeholder="Longitude"
+                step="0.000001"
+                required>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- QUESTION + GENERATE -->
+        <!-- ========================= -->
+
+        <div class="row">
+
+            <select id="questionType">
+
+                <option value="">
+                    Select Question Type
+                </option>
+
+                <option value="General">
+                    General Question
+                </option>
+
+                <option value="Career">
+                    Career / Job
+                </option>
+
+                <option value="Job Change">
+                    Job Change
+                </option>
+
+                <option value="Marriage">
+                    Marriage
+                </option>
+
+                <option value="Love">
+                    Love Relationship
+                </option>
+
+                <option value="Business">
+                    Business
+                </option>
+
+                <option value="Finance">
+                    Finance
+                </option>
+
+                <option value="Education">
+                    Education
+                </option>
+
+                <option value="Property">
+                    Property
+                </option>
+
+                <option value="Health">
+                    Health
+                </option>
+
+                <option value="Travel">
+                    Travel
+                </option>
+
+                <option value="Foreign Travel">
+                    Foreign Travel
+                </option>
+
+                <option value="Court Case">
+                    Court Case
+                </option>
+
+                <option value="Lost Item">
+                    Lost Item
+                </option>
+
+                <option value="Missing Person">
+                    Missing Person
+                </option>
+
+                <option value="Child Birth">
+                    Child Birth
+                </option>
+
+                <option value="Other">
+                    Other
+                </option>
+
+            </select>
+
+
+            <button type="submit">
+
+                Generate Kundali
+
+            </button>
+
+        </div>
+
+    </form>
+
+
+    <hr>
+
+
+    <!-- ========================= -->
+    <!-- RESULT -->
+    <!-- ========================= -->
+
+    <div id="result"></div>
+
+
+    <!-- ========================= -->
+    <!-- MAIN HOROSCOPE LAYOUT -->
+    <!-- ========================= -->
+
+    <div class="chartContainer">
+
+
+        <!-- LEFT -->
+        <div class="leftPanel">
+
+            <div
+                id="panchangCard"
+                class="panchangCard">
+            </div>
+
+        </div>
+
+
+        <!-- CENTER -->
+        <div
+            id="kundali"
+            class="kundali"
+            style="display:none;">
+
+        </div>
+
+
+        <!-- RIGHT -->
+        <div class="rightPanel">
+
+            <div
+                id="dashaCard"
+                class="dashaCard">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- PLANET DETAILS -->
+    <!-- ========================= -->
+
+    <div
+        id="planetDetailsCard"
+        class="planetDetailsCard"
+        style="display:none;">
+
+    </div>
+
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+
+</html>

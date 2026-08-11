@@ -6,7 +6,11 @@ const dasha = require("./dasha");
 // Setup
 // ----------------------------------
 
-swe.set_ephe_path("./ephe");
+const path = require("path");
+
+swe.set_ephe_path(
+    path.join(__dirname, "ephe")
+);
 
 // Lahiri Ayanamsa
 swe.set_sid_mode(1, 0, 0);
@@ -881,7 +885,7 @@ mandhi.house =
                 ),
     mandhi: mandhi,
 
-    
+
 
             nakshatra:
                 kundali[planet].nakshatra,

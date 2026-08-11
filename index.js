@@ -1,192 +1,166 @@
-const swe = require("sweph");
+const express = require("express");
+const path = require("path");
 
-// -----------------------------
-// Setup
-// -----------------------------
+const astrology = require("./services/astrology");
 
-swe.set_ephe_path("./ephe");
-
-// Lahiri Ayanamsa
-swe.set_sid_mode(1, 0, 0);
+const app = express();
 
 
-// -----------------------------
-// Current time UTC
-// -----------------------------
+// =====================================================
+// Middleware
+// =====================================================
 
-const now = new Date();
-
-const year = now.getUTCFullYear();
-const month = now.getUTCMonth() + 1;
-const day = now.getUTCDate();
-
-const hourUTC =
-    now.getUTCHours() +
-    now.getUTCMinutes() / 60 +
-    now.getUTCSeconds() / 3600;
-
-console.log(
-    "UTC:",
-    day,month,year);
-
-// -----------------------------
-// Bengaluru
-// -----------------------------
-
-const latitude = 12.9716;
-const longitude = 77.5946;
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 
-// -----------------------------
-// Julian Day
-// -----------------------------
+// =====================================================
+// Static files
+// index.html
+// script.js
+// style.css
+// etc.
+// =====================================================
 
-const jd = swe.julday(
-    year,
-    month,
-    day,
-    hourUTC,
-    1
-);
+app.use(express.static(path.join(__dirname, "public")));
 
 
-console.log("JD:", jd);
+// =====================================================
+// Home Page
+// =====================================================
 
+app.get("/", (req, res) => {
 
-// -----------------------------
-// Rashi
-// -----------------------------
-
-const rashis = [
-    "Mesha",
-    "Vrishabha",
-    "Mithuna",
-    "Karka",
-    "Simha",
-    "Kanya",
-    "Tula",
-    "Vrishchika",
-    "Dhanu",
-    "Makara",
-    "Kumbha",
-    "Meena"
-];
-
-
-function normalize(x) {
-    x = x % 360;
-    if (x < 0) x += 360;
-    return x;
-}
-
-
-function rashiPosition(deg) {
-
-    deg = normalize(deg);
-
-    return {
-        longitude: deg.toFixed(4),
-        rashi: rashis[Math.floor(deg / 30)],
-        degree: (deg % 30).toFixed(2)
-    };
-}
-
-
-// -----------------------------
-// Planets
-// -----------------------------
-
-const planets = {
-    Sun: 0,
-    Moon: 1,
-    Mercury: 2,
-    Venus: 3,
-    Mars: 4,
-    Jupiter: 5,
-    Saturn: 6,
-    Rahu: 10
-};
-
-
-let kundali = {};
-
-
-// IMPORTANT:
-// Use SIDEREAL flag here
-// Do NOT subtract ayanamsa manually
-
-const flags =
-    65536 | 65536; 
-
-
-for (const name in planets) {
-
-    const result = swe.calc_ut(
-        jd,
-        planets[name],
-        flags
+    res.sendFile(
+        path.join(__dirname,'public', "index.html")
     );
 
-
-    const longitude =
-        Number(result.data[0]);
+});
 
 
-    kundali[name] =
-        rashiPosition(longitude);
+// =====================================================
+// Kundali API
+// =====================================================
+
+app.post("/api/kundali", async (req, res) => {
+
+    try {
+
+        console.log("Kundali request received:");
+
+        console.log(req.body);
 
 
-    console.log(
-        name,
-        kundali[name]
-    );
-}
+        const data = req.body;
 
 
-// -----------------------------
-// Ketu
-// -----------------------------
+        // ---------------------------------------------
+        // Validation
+        // ---------------------------------------------
 
-kundali.Ketu =
-    rashiPosition(
-        Number(kundali.Rahu.longitude) + 180
-    );
+        if (!data.date) {
 
+            return res.status(400).json({
+                success: false,
+                message: "Date is required"
+            });
 
-// -----------------------------
-// Lagna
-// -----------------------------
-
-const houses = swe.houses(
-    jd,
-    latitude,
-    longitude,
-    "P"
-);
+        }
 
 
-const lagna =
-    Number(houses.data.points[0]);
+        if (!data.time) {
+
+            return res.status(400).json({
+                success: false,
+                message: "Time is required"
+            });
+
+        }
 
 
-const ayanamsa =
-    swe.get_ayanamsa_ut(jd);
+        if (
+            data.latitude === undefined ||
+            data.longitude === undefined
+        ) {
+
+            return res.status(400).json({
+                success: false,
+                message:
+                    "Latitude and longitude are required"
+            });
+
+        }
 
 
-kundali.Lagna =
-    rashiPosition(
-        lagna - ayanamsa
-    );
+        // ---------------------------------------------
+        // Default timezone
+        // India = UTC + 5:30
+        // ---------------------------------------------
+
+        if (
+            data.timezone === undefined ||
+            data.timezone === null
+        ) {
+
+            data.timezone = 5.5;
+
+        }
 
 
-// -----------------------------
-// Output
-// -----------------------------
+        // ---------------------------------------------
+        // Generate Kundali
+        // ---------------------------------------------
 
-console.log(
-    JSON.stringify(
-        kundali,
-        null,
-        2
-    )
+        const result =
+            await astrology.generate(data);
+
+
+        // ---------------------------------------------
+        // Send response
+        // ---------------------------------------------
+
+        res.json(result);
+
+
+    } catch (error) {
+
+        console.error(
+            "Kundali API Error:",
+            error
+        );
+
+
+        res.status(500).json({
+
+            success: false,
+
+            message:
+                error.message ||
+                "Kundali calculation failed"
+
+        });
+
+    }
+
+});
+
+
+// =====================================================
+// Render PORT
+// =====================================================
+
+const PORT =
+    process.env.PORT || 10000;
+
+
+app.listen(
+    PORT,
+    "0.0.0.0",
+    () => {
+
+        console.log(
+            `Kundali server running on port ${PORT}`
+        );
+
+    }
 );

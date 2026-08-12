@@ -2,10 +2,6 @@ const swe = require("sweph");
 const panchang = require("./panchang");
 const dasha = require("./dasha");
 
-// ----------------------------------
-// Setup
-// ----------------------------------
-
 const path = require("path");
 
 swe.set_ephe_path(
@@ -16,13 +12,541 @@ swe.set_ephe_path(
 swe.set_sid_mode(1, 0, 0);
 
 
-// ----------------------------------
-// Rashis
-// ----------------------------------
+// ==========================================
+// RASHIS
+// ==========================================
 
-// ----------------------------------
-// Mandhi / Gulika Calculation
-// ----------------------------------
+const rashis = [
+    "Mesha",
+    "Vrishabha",
+    "Mithuna",
+    "Karka",
+    "Simha",
+    "Kanya",
+    "Tula",
+    "Vrishchika",
+    "Dhanu",
+    "Makara",
+    "Kumbha",
+    "Meena"
+];
+
+
+// ==========================================
+// NORMALIZE
+// ==========================================
+
+function normalize(x) {
+
+    x = x % 360;
+
+    if (x < 0) {
+        x += 360;
+    }
+
+    return x;
+}
+
+
+// ==========================================
+// RASHI POSITION
+// ==========================================
+
+function rashiPosition(deg) {
+
+    deg = normalize(deg);
+
+    return {
+
+        longitude: deg,
+
+        rashi:
+            rashis[
+                Math.floor(deg / 30)
+            ],
+
+        degree:
+            Number(
+                (deg % 30).toFixed(2)
+            )
+    };
+}
+
+
+// ==========================================
+// NAKSHATRAS
+// ==========================================
+
+const nakshatras = [
+
+    "Ashwini",
+    "Bharani",
+    "Krittika",
+    "Rohini",
+    "Mrigashira",
+    "Ardra",
+    "Punarvasu",
+    "Pushya",
+    "Ashlesha",
+    "Magha",
+    "Purva Phalguni",
+    "Uttara Phalguni",
+    "Hasta",
+    "Chitra",
+    "Swati",
+    "Vishakha",
+    "Anuradha",
+    "Jyeshtha",
+    "Mula",
+    "Purva Ashadha",
+    "Uttara Ashadha",
+    "Shravana",
+    "Dhanishtha",
+    "Shatabhisha",
+    "Purva Bhadrapada",
+    "Uttara Bhadrapada",
+    "Revati"
+
+];
+
+
+// ==========================================
+// NAKSHATRA LORDS
+// ==========================================
+
+const nakshatraLords = [
+
+    "Ketu",
+    "Venus",
+    "Sun",
+    "Moon",
+    "Mars",
+    "Rahu",
+    "Jupiter",
+    "Saturn",
+    "Mercury",
+
+    "Ketu",
+    "Venus",
+    "Sun",
+    "Moon",
+    "Mars",
+    "Rahu",
+    "Jupiter",
+    "Saturn",
+    "Mercury",
+
+    "Ketu",
+    "Venus",
+    "Sun",
+    "Moon",
+    "Mars",
+    "Rahu",
+    "Jupiter",
+    "Saturn",
+    "Mercury"
+
+];
+
+
+// ==========================================
+// VIMSHOTTARI DASHA
+// ==========================================
+
+const dashaYears = {
+
+    Ketu: 7,
+    Venus: 20,
+    Sun: 6,
+    Moon: 10,
+    Mars: 7,
+    Rahu: 18,
+    Jupiter: 16,
+    Saturn: 19,
+    Mercury: 17
+
+};
+
+
+const dashaOrder = [
+
+    "Ketu",
+    "Venus",
+    "Sun",
+    "Moon",
+    "Mars",
+    "Rahu",
+    "Jupiter",
+    "Saturn",
+    "Mercury"
+
+];
+
+
+// ==========================================
+// NAKSHATRA CALCULATION
+// ==========================================
+
+function getNakshatra(longitude) {
+
+    longitude = normalize(longitude);
+
+
+    // --------------------------------------
+    // Nakshatra size = 13°20'
+    // --------------------------------------
+
+    const nakshatraSize =
+        360 / 27;
+
+
+    // --------------------------------------
+    // Pada size = 3°20'
+    // --------------------------------------
+
+    const padaSize =
+        nakshatraSize / 4;
+
+
+    // --------------------------------------
+    // Nakshatra index
+    // --------------------------------------
+
+    const nakshatraIndex =
+        Math.floor(
+            longitude / nakshatraSize
+        );
+
+
+    // --------------------------------------
+    // Nakshatra start
+    // --------------------------------------
+
+    const nakshatraStart =
+        nakshatraIndex *
+        nakshatraSize;
+
+
+    // --------------------------------------
+    // Position inside Nakshatra
+    // --------------------------------------
+
+    const positionInNakshatra =
+        longitude -
+        nakshatraStart;
+
+
+    // --------------------------------------
+    // Pada
+    // --------------------------------------
+
+    const pada =
+        Math.floor(
+            positionInNakshatra /
+            padaSize
+        ) + 1;
+
+
+    // ======================================
+    // NAKSHATRA LORD
+    // ======================================
+
+    const nakshatraLord =
+        nakshatraLords[
+            nakshatraIndex
+        ];
+
+
+    // ======================================
+    // SUB LORD
+    // ======================================
+
+    const totalDashaYears = 120;
+
+    const nakshatraLordIndex =
+        dashaOrder.indexOf(
+            nakshatraLord
+        );
+
+
+    let accumulated = 0;
+
+    let subLord = null;
+
+    let subLordStart = 0;
+
+    let subLordEnd = 0;
+
+
+    for (let i = 0; i < 9; i++) {
+
+        const lordIndex =
+            (
+                nakshatraLordIndex +
+                i
+            ) % 9;
+
+
+        const lord =
+            dashaOrder[lordIndex];
+
+
+        const subLength =
+            nakshatraSize *
+            (
+                dashaYears[lord] /
+                totalDashaYears
+            );
+
+
+        const start =
+            accumulated;
+
+
+        const end =
+            accumulated +
+            subLength;
+
+
+        if (
+            positionInNakshatra >= start &&
+            positionInNakshatra < end
+        ) {
+
+            subLord = lord;
+
+            subLordStart = start;
+
+            subLordEnd = end;
+
+            break;
+        }
+
+
+        accumulated = end;
+    }
+
+
+    // ======================================
+    // SOOKSHMA DAIPATHI
+    // ======================================
+
+    let sookshmaDaipathi = null;
+
+
+    if (subLord) {
+
+        const subLordIndex =
+            dashaOrder.indexOf(
+                subLord
+            );
+
+
+        const subLordPosition =
+            positionInNakshatra -
+            subLordStart;
+
+
+        const subLordDuration =
+            subLordEnd -
+            subLordStart;
+
+
+        let subAccumulated = 0;
+
+
+        for (let i = 0; i < 9; i++) {
+
+            const lordIndex =
+                (
+                    subLordIndex +
+                    i
+                ) % 9;
+
+
+            const lord =
+                dashaOrder[lordIndex];
+
+
+            const subSubLength =
+                subLordDuration *
+                (
+                    dashaYears[lord] /
+                    totalDashaYears
+                );
+
+
+            const start =
+                subAccumulated;
+
+
+            const end =
+                subAccumulated +
+                subSubLength;
+
+
+            if (
+                subLordPosition >= start &&
+                subLordPosition < end
+            ) {
+
+                sookshmaDaipathi =
+                    lord;
+
+                break;
+            }
+
+
+            subAccumulated = end;
+        }
+    }
+
+
+    // ======================================
+    // RETURN NAKSHATRA DETAILS
+    // ======================================
+
+    return {
+
+        nakshatra:
+            nakshatras[
+                nakshatraIndex
+            ],
+
+        // Nakshatra Lord
+        nakshatraLord,
+
+        // Sub Lord
+        subLord,
+
+        // Sookshma Daipathi
+        sookshmaDaipathi,
+
+        pada,
+
+        nakshatraIndex:
+            nakshatraIndex + 1,
+
+        degreeInNakshatra:
+            Number(
+                positionInNakshatra
+                    .toFixed(4)
+            )
+
+    };
+}
+
+
+// ==========================================
+// PLANETS
+// ==========================================
+
+const planets = {
+
+    Sun: 0,
+
+    Moon: 1,
+
+    Mercury: 2,
+
+    Venus: 3,
+
+    Mars: 4,
+
+    Jupiter: 5,
+
+    Saturn: 6,
+
+    Rahu: 10
+
+};
+
+
+// ==========================================
+// COMBUSTION
+// ==========================================
+
+function getAngularDistance(
+    planetLongitude,
+    sunLongitude
+) {
+
+    const difference =
+        Math.abs(
+            normalize(
+                planetLongitude -
+                sunLongitude
+            )
+        );
+
+
+    return Math.min(
+        difference,
+        360 - difference
+    );
+}
+
+
+const combustionLimits = {
+
+    Moon: 12,
+
+    Mars: 17,
+
+    Mercury: 14,
+
+    Jupiter: 11,
+
+    Venus: 10,
+
+    Saturn: 15
+
+};
+
+
+function isCombust(
+    planet,
+    planetLongitude,
+    sunLongitude
+) {
+
+    if (planet === "Sun") {
+        return false;
+    }
+
+
+    if (
+        planet === "Rahu" ||
+        planet === "Ketu"
+    ) {
+
+        return false;
+    }
+
+
+    const limit =
+        combustionLimits[planet];
+
+
+    if (limit === undefined) {
+        return false;
+    }
+
+
+    const distance =
+        getAngularDistance(
+            planetLongitude,
+            sunLongitude
+        );
+
+
+    return distance <= limit;
+}
+
+
+// ==========================================
+// SUNRISE / SUNSET
+// ==========================================
 
 function getSunriseSunset(
     jd,
@@ -31,35 +555,46 @@ function getSunriseSunset(
 ) {
 
     const geopos = [
+
         Number(longitude),
+
         Number(latitude),
+
         0
+
     ];
 
-    const riseFlags = 1; // SE_CALC_RISE
-    const setFlags = 2;  // SE_CALC_SET
 
-    const rise = swe.rise_trans(
-        jd,
-        0,              // Sun
-        "",
-        0,
-        riseFlags,
-        geopos,
-        1013.25,
-        15
-    );
+    const riseFlags = 1;
 
-    const set = swe.rise_trans(
-        jd,
-        0,              // Sun
-        "",
-        0,
-        setFlags,
-        geopos,
-        1013.25,
-        15
-    );
+    const setFlags = 2;
+
+
+    const rise =
+        swe.rise_trans(
+            jd,
+            0,
+            "",
+            0,
+            riseFlags,
+            geopos,
+            1013.25,
+            15
+        );
+
+
+    const set =
+        swe.rise_trans(
+            jd,
+            0,
+            "",
+            0,
+            setFlags,
+            geopos,
+            1013.25,
+            15
+        );
+
 
     return {
 
@@ -71,6 +606,12 @@ function getSunriseSunset(
 
     };
 }
+
+
+// ==========================================
+// MANDHI
+// ==========================================
+
 function calculateMandhi(
     jd,
     latitude,
@@ -80,20 +621,13 @@ function calculateMandhi(
     const {
         sunrise,
         sunset
-    } = getSunriseSunset(
-        jd,
-        latitude,
-        longitude
-    );
+    } =
+        getSunriseSunset(
+            jd,
+            latitude,
+            longitude
+        );
 
-
-    // ----------------------------------
-    // Weekday
-    // 0 = Sunday
-    // 1 = Monday
-    // ...
-    // 6 = Saturday
-    // ----------------------------------
 
     const weekday =
         Math.floor(
@@ -101,19 +635,15 @@ function calculateMandhi(
         );
 
 
-    // ----------------------------------
-    // Common Gulika/Mandhi segment
-    // ----------------------------------
-
     const daySegment = {
 
-        0: 7, // Sunday
-        1: 6, // Monday
-        2: 5, // Tuesday
-        3: 4, // Wednesday
-        4: 3, // Thursday
-        5: 2, // Friday
-        6: 1  // Saturday
+        0: 7,
+        1: 6,
+        2: 5,
+        3: 4,
+        4: 3,
+        5: 2,
+        6: 1
 
     };
 
@@ -122,10 +652,6 @@ function calculateMandhi(
         daySegment[weekday];
 
 
-    // ----------------------------------
-    // Day duration
-    // ----------------------------------
-
     const dayDuration =
         sunset - sunrise;
 
@@ -133,10 +659,6 @@ function calculateMandhi(
     const segmentDuration =
         dayDuration / 8;
 
-
-    // ----------------------------------
-    // Middle of Mandhi segment
-    // ----------------------------------
 
     const mandhiJD =
         sunrise +
@@ -148,10 +670,6 @@ function calculateMandhi(
             segmentDuration / 2
         );
 
-
-    // ----------------------------------
-    // Calculate Ascendant at Mandhi time
-    // ----------------------------------
 
     const houses =
         swe.houses(
@@ -209,6 +727,18 @@ function calculateMandhi(
         nakshatra:
             nakshatra.nakshatra,
 
+        // NEW
+        nakshatraLord:
+            nakshatra.nakshatraLord,
+
+        // NEW
+        subLord:
+            nakshatra.subLord,
+
+        // NEW
+        sookshmaDaipathi:
+            nakshatra.sookshmaDaipathi,
+
         pada:
             nakshatra.pada,
 
@@ -225,275 +755,14 @@ function calculateMandhi(
         mandhiJD
 
     };
-
-}
-
-const rashis = [
-    "Mesha",
-    "Vrishabha",
-    "Mithuna",
-    "Karka",
-    "Simha",
-    "Kanya",
-    "Tula",
-    "Vrishchika",
-    "Dhanu",
-    "Makara",
-    "Kumbha",
-    "Meena"
-];
-
-
-// ----------------------------------
-// Normalize
-// ----------------------------------
-
-function normalize(x) {
-
-    x = x % 360;
-
-    if (x < 0) {
-        x += 360;
-    }
-
-    return x;
 }
 
 
-// ----------------------------------
-// Rashi Position
-// ----------------------------------
-
-function rashiPosition(deg) {
-
-    deg = normalize(deg);
-
-    return {
-
-        longitude: deg,
-
-        rashi:
-            rashis[Math.floor(deg / 30)],
-
-        degree:
-            Number(
-                (deg % 30).toFixed(2)
-            )
-
-    };
-}
-
-
-// ----------------------------------
-// Nakshatras
-// ----------------------------------
-
-const nakshatras = [
-
-    "Ashwini",
-    "Bharani",
-    "Krittika",
-    "Rohini",
-    "Mrigashira",
-    "Ardra",
-    "Punarvasu",
-    "Pushya",
-    "Ashlesha",
-    "Magha",
-    "Purva Phalguni",
-    "Uttara Phalguni",
-    "Hasta",
-    "Chitra",
-    "Swati",
-    "Vishakha",
-    "Anuradha",
-    "Jyeshtha",
-    "Mula",
-    "Purva Ashadha",
-    "Uttara Ashadha",
-    "Shravana",
-    "Dhanishtha",
-    "Shatabhisha",
-    "Purva Bhadrapada",
-    "Uttara Bhadrapada",
-    "Revati"
-
-];
-
-
-// ----------------------------------
-// Nakshatra Calculation
-// ----------------------------------
-
-function getNakshatra(longitude) {
-
-    longitude = normalize(longitude);
-
-    // 13°20'
-    const nakshatraSize =
-        360 / 27;
-
-    // 3°20'
-    const padaSize =
-        nakshatraSize / 4;
-
-    const nakshatraIndex =
-        Math.floor(
-            longitude / nakshatraSize
-        );
-
-    const nakshatraStart =
-        nakshatraIndex *
-        nakshatraSize;
-
-    const positionInNakshatra =
-        longitude -
-        nakshatraStart;
-
-    const pada =
-        Math.floor(
-            positionInNakshatra /
-            padaSize
-        ) + 1;
-
-    return {
-
-        nakshatra:
-            nakshatras[nakshatraIndex],
-
-        pada,
-
-        nakshatraIndex:
-            nakshatraIndex + 1,
-
-        degreeInNakshatra:
-            Number(
-                positionInNakshatra.toFixed(4)
-            )
-
-    };
-}
-
-
-// ----------------------------------
-// Planets
-// ----------------------------------
-
-const planets = {
-
-    Sun: 0,
-
-    Moon: 1,
-
-    Mercury: 2,
-
-    Venus: 3,
-
-    Mars: 4,
-
-    Jupiter: 5,
-
-    Saturn: 6,
-
-    Rahu: 10
-
-};
-
-
-// ----------------------------------
-// Combustion Calculation
-// ----------------------------------
-
-function getAngularDistance(
-    planetLongitude,
-    sunLongitude
-) {
-
-    const difference =
-        Math.abs(
-            normalize(
-                planetLongitude -
-                sunLongitude
-            )
-        );
-
-    return Math.min(
-        difference,
-        360 - difference
-    );
-}
-
-
-// Common approximate Vedic
-// combustion limits.
-//
-// Different traditions may use
-// slightly different limits.
-
-const combustionLimits = {
-
-    Moon: 12,
-
-    Mars: 17,
-
-    Mercury: 14,
-
-    Jupiter: 11,
-
-    Venus: 10,
-
-    Saturn: 15
-
-};
-
-
-function isCombust(
-    planet,
-    planetLongitude,
-    sunLongitude
-) {
-
-    // Sun cannot be combust
-    if (planet === "Sun") {
-        return false;
-    }
-
-    // Rahu/Ketu are not treated
-    // as combust in this implementation
-    if (
-        planet === "Rahu" ||
-        planet === "Ketu"
-    ) {
-        return false;
-    }
-
-    const limit =
-        combustionLimits[planet];
-
-    if (limit === undefined) {
-        return false;
-    }
-
-    const distance =
-        getAngularDistance(
-            planetLongitude,
-            sunLongitude
-        );
-
-    return distance <= limit;
-}
-
-
-// ----------------------------------
-// Generate Kundali
-// ----------------------------------
+// ==========================================
+// GENERATE KUNDALI
+// ==========================================
 
 async function generate(data) {
-
-    console.log(
-        "Data received:",
-        data
-    );
 
     const {
 
@@ -512,14 +781,15 @@ async function generate(data) {
     } = data;
 
 
-    // ----------------------------------
-    // Date & Time
-    // ----------------------------------
+    // --------------------------------------
+    // Date / Time
+    // --------------------------------------
 
     const [year, month, day] =
         date
             .split("-")
             .map(Number);
+
 
     const [hour, minute] =
         time
@@ -527,9 +797,9 @@ async function generate(data) {
             .map(Number);
 
 
-    // ----------------------------------
-    // Local Time -> UTC
-    // ----------------------------------
+    // --------------------------------------
+    // Local -> UTC
+    // --------------------------------------
 
     const hourUTC =
         hour +
@@ -537,9 +807,9 @@ async function generate(data) {
         Number(timezone);
 
 
-    // ----------------------------------
+    // --------------------------------------
     // Julian Day
-    // ----------------------------------
+    // --------------------------------------
 
     const jd =
         swe.julday(
@@ -554,24 +824,17 @@ async function generate(data) {
     let kundali = {};
 
 
-    // ----------------------------------
-    // IMPORTANT FLAGS
-    // ----------------------------------
-    //
-    // 65536 = SIDEREAL
-    // 256   = SPEED
-    //
-    // Speed is required to detect
-    // retrograde motion.
-    // ----------------------------------
+    // --------------------------------------
+    // Flags
+    // --------------------------------------
 
     const flags =
         65536 | 256;
 
 
-    // ----------------------------------
-    // Planet Positions
-    // ----------------------------------
+    // ======================================
+    // PLANET POSITIONS
+    // ======================================
 
     for (const name in planets) {
 
@@ -612,12 +875,24 @@ async function generate(data) {
 
             speed,
 
-            // Negative speed = retrograde
             retrograde:
                 speed < 0,
 
+            // =================================
+            // NAKSHATRA DETAILS
+            // =================================
+
             nakshatra:
                 nakshatra.nakshatra,
+
+            nakshatraLord:
+                nakshatra.nakshatraLord,
+
+            subLord:
+                nakshatra.subLord,
+
+            sookshmaDaipathi:
+                nakshatra.sookshmaDaipathi,
 
             pada:
                 nakshatra.pada,
@@ -630,17 +905,17 @@ async function generate(data) {
     }
 
 
-    // ----------------------------------
-    // Sun Longitude
-    // ----------------------------------
+    // ======================================
+    // SUN LONGITUDE
+    // ======================================
 
     const sunLongitude =
         kundali.Sun.longitude;
 
 
-    // ----------------------------------
-    // Retrograde + Combustion
-    // ----------------------------------
+    // ======================================
+    // COMBUSTION
+    // ======================================
 
     for (const name in kundali) {
 
@@ -683,9 +958,9 @@ async function generate(data) {
     }
 
 
-    // ----------------------------------
-    // Ketu
-    // ----------------------------------
+    // ======================================
+    // KETU
+    // ======================================
 
     const ketuLongitude =
         normalize(
@@ -710,8 +985,6 @@ async function generate(data) {
         longitude:
             ketuLongitude,
 
-        // Ketu follows the node's
-        // apparent retrograde motion
         speed:
             kundali.Rahu.speed,
 
@@ -725,8 +998,21 @@ async function generate(data) {
                 sunLongitude
             ),
 
+        // =================================
+        // KETU NAKSHATRA DETAILS
+        // =================================
+
         nakshatra:
             ketuNakshatra.nakshatra,
+
+        nakshatraLord:
+            ketuNakshatra.nakshatraLord,
+
+        subLord:
+            ketuNakshatra.subLord,
+
+        sookshmaDaipathi:
+            ketuNakshatra.sookshmaDaipathi,
 
         pada:
             ketuNakshatra.pada,
@@ -737,9 +1023,9 @@ async function generate(data) {
     };
 
 
-    // ----------------------------------
-    // Lagna
-    // ----------------------------------
+    // ======================================
+    // LAGNA
+    // ======================================
 
     const houses =
         swe.houses(
@@ -748,12 +1034,14 @@ async function generate(data) {
             Number(longitude),
             "P"
         );
-const mandhi =
-    calculateMandhi(
-        jd,
-        Number(latitude),
-        Number(longitude)
-    );
+
+
+    const mandhi =
+        calculateMandhi(
+            jd,
+            Number(latitude),
+            Number(longitude)
+        );
 
 
     const lagna =
@@ -768,7 +1056,8 @@ const mandhi =
 
     const siderealLagna =
         normalize(
-            lagna - ayanamsa
+            lagna -
+            ayanamsa
         );
 
 
@@ -787,8 +1076,21 @@ const mandhi =
         longitude:
             siderealLagna,
 
+        // =================================
+        // LAGNA NAKSHATRA DETAILS
+        // =================================
+
         nakshatra:
             lagnaNakshatra.nakshatra,
+
+        nakshatraLord:
+            lagnaNakshatra.nakshatraLord,
+
+        subLord:
+            lagnaNakshatra.subLord,
+
+        sookshmaDaipathi:
+            lagnaNakshatra.sookshmaDaipathi,
 
         pada:
             lagnaNakshatra.pada,
@@ -799,31 +1101,42 @@ const mandhi =
     };
 
 
-    // ----------------------------------
-    // Calculate Houses
-    // ----------------------------------
+    // ======================================
+    // HOUSE CALCULATION
+    // ======================================
 
     const lagnaIndex =
         rashis.indexOf(
             kundali.Lagna.rashi
         );
-const mandhiRashiIndex =
-    rashis.indexOf(
-        mandhi.rashi
-    );
 
-let mandhiHouse =
-    mandhiRashiIndex -
-    lagnaIndex +
-    1;
 
-if (mandhiHouse <= 0) {
-    mandhiHouse += 12;
-}
+    const mandhiRashiIndex =
+        rashis.indexOf(
+            mandhi.rashi
+        );
 
-mandhi.house =
-    mandhiHouse;
 
+    let mandhiHouse =
+        mandhiRashiIndex -
+        lagnaIndex +
+        1;
+
+
+    if (mandhiHouse <= 0) {
+
+        mandhiHouse += 12;
+
+    }
+
+
+    mandhi.house =
+        mandhiHouse;
+
+
+    // ======================================
+    // PLANETS DATA
+    // ======================================
 
     let planetsData = [];
 
@@ -883,34 +1196,44 @@ mandhi.house =
                             .sunDistance || 0
                     ).toFixed(4)
                 ),
-    mandhi: mandhi,
 
-
+            // =================================
+            // NAKSHATRA DETAILS
+            // =================================
 
             nakshatra:
                 kundali[planet].nakshatra,
+
+            nakshatraLord:
+                kundali[planet].nakshatraLord,
+
+            subLord:
+                kundali[planet].subLord,
+
+            sookshmaDaipathi:
+                kundali[planet].sookshmaDaipathi,
 
             pada:
                 kundali[planet].pada,
 
             nakshatraIndex:
                 kundali[planet]
-                    .nakshatraIndex
+                    .nakshatraIndex,
+
+            // =================================
+            // MANDHI
+            // =================================
+
+            mandhi
 
         });
 
     }
 
 
-    console.log(
-        "Planet Details:",
-        planetsData
-    );
-
-
-    // ----------------------------------
-    // Panchang
-    // ----------------------------------
+    // ======================================
+    // PANCHANG
+    // ======================================
 
     const panchangData =
         panchang.calculate(
@@ -924,9 +1247,9 @@ mandhi.house =
         );
 
 
-    // ----------------------------------
-    // Dasha
-    // ----------------------------------
+    // ======================================
+    // DASHA
+    // ======================================
 
     const dashaData =
         dasha.calculate(
@@ -938,9 +1261,9 @@ mandhi.house =
         );
 
 
-    // ----------------------------------
-    // Return
-    // ----------------------------------
+    // ======================================
+    // RETURN
+    // ======================================
 
     return {
 
@@ -961,40 +1284,54 @@ mandhi.house =
         },
 
 
+        // =================================
+        // LAGNA
+        // =================================
+
         lagna:
             kundali.Lagna,
 
+
+        // =================================
+        // PLANETS
+        // =================================
 
         planets:
             planetsData,
 
 
+        // =================================
+        // PANCHANG
+        // =================================
+
         panchang:
             panchangData,
 
+
+        // =================================
+        // DASHA
+        // =================================
 
         dasha:
             dashaData,
 
 
-            
-    mandhi:
-        mandhi,
+        // =================================
+        // MANDHI
+        // =================================
 
-        // ----------------------------------
-        // Nakshatra Card Data
-        // ----------------------------------
+        // mandhi:
 
-       
+        //     mandhi
 
     };
 
 }
 
 
-// ----------------------------------
-// Export
-// ----------------------------------
+// ==========================================
+// EXPORT
+// ==========================================
 
 module.exports = {
 

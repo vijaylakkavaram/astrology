@@ -234,15 +234,46 @@ button:hover{
     color:#8B4513;
 
 }
+/* ==========================================
+   LAGNA HOUSE
+   ========================================== */
+/* ==========================================
+   LAGNA HOUSE
+   ========================================== */
 
-.lagna{
+.lagna {
+    position: relative;
 
-    border:2px solid red !important;
+    border: 2px solid red !important;
 
-    background:#fff3cd !important;
+    background: #fff3cd !important;
 
+    overflow: hidden;
 }
 
+
+/* Lagna text */
+
+.lagnaLabel {
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    color: red;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    white-space: nowrap;
+
+    z-index: 10;
+}
+ 
 /* ===========================
    PANCHANG
 =========================== */
@@ -541,15 +572,14 @@ select{
 
     font-weight: bold;
 }
-/* ============================= */
-/* PLANET DETAILS CARD */
-/* ============================= */
+/* ==========================================
+   PLANET DETAILS TABLE
+   ========================================== */
 
 .planetDetailsCard {
 
     width: 95%;
-
-    max-width: 1100px;
+    max-width: 1400px;
 
     margin: 25px auto;
 
@@ -565,10 +595,13 @@ select{
 
     box-shadow: 0 3px 8px rgba(0,0,0,0.15);
 
+    overflow: hidden;
 }
 
 
-/* Heading */
+/* ==========================================
+   HEADING
+   ========================================== */
 
 .planetDetailsCard h2 {
 
@@ -579,37 +612,54 @@ select{
     margin: 0 0 15px 0;
 
     font-size: 20px;
-
 }
 
 
-/* Table wrapper */
+/* ==========================================
+   TABLE WRAPPER
+   ========================================== */
 
 .tableWrapper {
 
     width: 100%;
 
-    overflow-x: auto;
+    max-width: 100%;
 
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    box-sizing: border-box;
+
+    -webkit-overflow-scrolling: touch;
 }
 
 
-/* Table */
+/* ==========================================
+   TABLE
+   ========================================== */
 
 .planetDetailsCard table {
 
-    width: 100%;
+    width: max-content;
+
+    /*
+     * Important:
+     * Table gets enough space for ALL
+     * 11 columns.
+     */
+    min-width: 1250px;
 
     border-collapse: collapse;
 
-    table-layout: fixed;
+    table-layout: auto;
 
     background: white;
-
 }
 
 
-/* Header */
+/* ==========================================
+   HEADER
+   ========================================== */
 
 .planetDetailsCard th {
 
@@ -621,7 +671,7 @@ select{
 
     border: 1px solid #8B4513;
 
-    padding: 8px 5px;
+    padding: 9px 12px;
 
     text-align: center;
 
@@ -629,16 +679,19 @@ select{
 
     white-space: nowrap;
 
+    box-sizing: border-box;
 }
 
 
-/* Cells */
+/* ==========================================
+   CELLS
+   ========================================== */
 
 .planetDetailsCard td {
 
     border: 1px solid #c9b79c;
 
-    padding: 7px 4px;
+    padding: 8px 12px;
 
     text-align: center;
 
@@ -648,143 +701,207 @@ select{
 
     white-space: nowrap;
 
+    box-sizing: border-box;
 }
 
 
-/* Planet column */
+/* ==========================================
+   1. PLANET
+   ========================================== */
 
 .planetDetailsCard th:nth-child(1),
 .planetDetailsCard td:nth-child(1) {
 
-    width: 11%;
+    min-width: 105px;
+
+    text-align: left;
 
     font-weight: bold;
-
 }
 
 
-/* Rashi */
+/* ==========================================
+   2. RASHI
+   ========================================== */
 
 .planetDetailsCard th:nth-child(2),
 .planetDetailsCard td:nth-child(2) {
 
-    width: 12%;
-
+    min-width: 100px;
 }
 
 
-/* House */
+/* ==========================================
+   3. HOUSE
+   ========================================== */
 
 .planetDetailsCard th:nth-child(3),
 .planetDetailsCard td:nth-child(3) {
 
-    width: 7%;
-
+    min-width: 65px;
 }
 
 
-/* Degree */
+/* ==========================================
+   4. DEGREE
+   ========================================== */
 
 .planetDetailsCard th:nth-child(4),
 .planetDetailsCard td:nth-child(4) {
 
-    width: 9%;
-
+    min-width: 85px;
 }
 
 
-/* Nakshatra */
+/* ==========================================
+   5. NAKSHATRA
+   ========================================== */
 
 .planetDetailsCard th:nth-child(5),
 .planetDetailsCard td:nth-child(5) {
 
-    width: 17%;
-
+    min-width: 125px;
 }
 
 
-/* Pada */
+/* ==========================================
+   6. NAKSHATRA LORD
+   ========================================== */
 
 .planetDetailsCard th:nth-child(6),
 .planetDetailsCard td:nth-child(6) {
 
-    width: 7%;
-
+    min-width: 135px;
 }
 
 
-/* Motion */
+/* ==========================================
+   7. SUB LORD
+   ========================================== */
 
 .planetDetailsCard th:nth-child(7),
 .planetDetailsCard td:nth-child(7) {
 
-    width: 17%;
-
+    min-width: 105px;
 }
 
 
-/* Combustion */
+/* ==========================================
+   8. SOOKSHMA DAIPATHI
+   ========================================== */
 
 .planetDetailsCard th:nth-child(8),
 .planetDetailsCard td:nth-child(8) {
 
-    width: 20%;
-
+    min-width: 165px;
 }
 
 
-/* Alternate rows */
+/* ==========================================
+   9. PADA
+   ========================================== */
+
+.planetDetailsCard th:nth-child(9),
+.planetDetailsCard td:nth-child(9) {
+
+    min-width: 60px;
+}
+
+
+/* ==========================================
+   10. MOTION
+   ========================================== */
+
+.planetDetailsCard th:nth-child(10),
+.planetDetailsCard td:nth-child(10) {
+
+    min-width: 105px;
+
+    white-space: nowrap;
+}
+
+
+/* ==========================================
+   11. COMBUSTION
+   ========================================== */
+
+.planetDetailsCard th:nth-child(11),
+.planetDetailsCard td:nth-child(11) {
+
+    min-width: 115px;
+
+    white-space: nowrap;
+}
+
+
+/* ==========================================
+   PLANET SYMBOL
+   ========================================== */
+
+.planetSymbol {
+
+    display: inline-block;
+
+    margin-right: 5px;
+
+    font-size: 18px;
+}
+
+
+/* ==========================================
+   MOTION
+   ========================================== */
+
+.retrograde,
+.direct {
+
+    display: inline-block;
+
+    white-space: nowrap;
+
+    font-weight: bold;
+}
+
+
+/* ==========================================
+   COMBUSTION
+   ========================================== */
+
+.combust {
+
+    display: inline-block;
+
+    white-space: nowrap;
+
+    font-weight: bold;
+
+    color: #c2410c;
+}
+
+
+/* ==========================================
+   ALTERNATE ROWS
+   ========================================== */
 
 .planetDetailsCard tbody tr:nth-child(even) {
 
     background: #fffaf0;
-
 }
 
 
-/* Hover */
+/* ==========================================
+   HOVER
+   ========================================== */
 
 .planetDetailsCard tbody tr:hover {
 
     background: #fff1c7;
-
 }
 
 
-/* Retrograde */
-
-.retrograde {
-
-    color: #b91c1c;
-
-    font-weight: bold;
-
-}
-
-
-/* Direct */
-
-.direct {
-
-    color: #15803d;
-
-    font-weight: bold;
-
-}
-
-
-/* Combust */
-
-.combust {
-
-    color: #c2410c;
-
-    font-weight: bold;
-
-}
-
-
-/* Mobile */
+/* ==========================================
+   MOBILE
+   ========================================== */
 
 @media (max-width: 800px) {
 
@@ -793,15 +910,251 @@ select{
         width: 98%;
 
         padding: 10px;
-
     }
+
 
     .planetDetailsCard table {
 
-        min-width: 900px;
+        min-width: 1250px;
 
-        table-layout: fixed;
+        table-layout: auto;
+    }
+
+
+    .planetDetailsCard th,
+    .planetDetailsCard td {
+
+        padding: 8px 10px;
+    }
+
+}
+
+.locationSearch {
+    position: relative;
+    width: 100%;
+}
+
+.locationSearch input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.locationSuggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+
+    background: white;
+
+    border: 1px solid #ddd;
+
+    border-top: none;
+
+    z-index: 1000;
+
+    display: none;
+
+    max-height: 250px;
+
+    overflow-y: auto;
+}
+
+.locationSuggestion {
+    padding: 12px;
+
+    cursor: pointer;
+
+    border-bottom: 1px solid #eee;
+
+    background: white;
+}
+
+.locationSuggestion:hover {
+    background: #f2f2f2;
+}
+
+.locationSuggestion .locationName {
+    font-weight: 600;
+}
+
+.locationSuggestion .locationDetails {
+    font-size: 12px;
+
+    color: #666;
+
+    margin-top: 3px;
+}
+
+/* ==========================================
+   PLANET DETAILS CARD
+   ========================================== */
+
+#planetDetailsCard,
+#lagnaDetailsCard {
+
+    width: 100%;
+    max-width: 100%;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+
+}
+
+
+/* ==========================================
+   TABLE WRAPPER
+   ========================================== */
+
+.planetTableWrapper {
+
+    width: 100%;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    -webkit-overflow-scrolling: touch;
+
+    box-sizing: border-box;
+
+}
+
+
+/* ==========================================
+   PLANET TABLE
+   ========================================== */
+
+.planetDetailsTable {
+
+    width: max-content;
+
+    min-width: 100%;
+
+    border-collapse: collapse;
+
+    table-layout: auto;
+
+    font-size: 14px;
+
+}
+
+
+/* ==========================================
+   HEADER
+   ========================================== */
+
+.planetDetailsTable th {
+
+    padding: 10px 14px;
+
+    white-space: nowrap;
+
+    text-align: center;
+
+    font-weight: 700;
+
+}
+
+
+/* ==========================================
+   CELLS
+   ========================================== */
+
+.planetDetailsTable td {
+
+    padding: 9px 14px;
+
+    white-space: nowrap;
+
+    text-align: center;
+
+}
+
+
+/* ==========================================
+   PLANET NAME
+   ========================================== */
+
+.planetDetailsTable .planetName {
+
+    font-weight: 700;
+
+    text-align: left;
+
+    min-width: 100px;
+
+}
+
+
+/* ==========================================
+   PLANET SYMBOL
+   ========================================== */
+
+.planetSymbol {
+
+    font-size: 18px;
+
+    margin-right: 5px;
+
+}
+
+
+/* ==========================================
+   MOTION
+   ========================================== */
+
+.motionDirect {
+
+    font-weight: 600;
+
+}
+
+
+.motionRetro {
+
+    font-weight: 600;
+
+}
+
+
+/* ==========================================
+   COMBUSTION
+   ========================================== */
+
+.combustStatus {
+
+    font-weight: 700;
+
+}
+
+
+.normalStatus {
+
+    font-weight: 600;
+
+}
+
+
+/* ==========================================
+   MOBILE
+   ========================================== */
+
+@media (max-width: 900px) {
+
+    .planetDetailsTable {
+
+        font-size: 13px;
+
+    }
+
+
+    .planetDetailsTable th,
+    .planetDetailsTable td {
+
+        padding: 8px 10px;
 
     }
 
 }
+

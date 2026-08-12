@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const path = require("path");
 
@@ -11,121 +13,225 @@ const app = express();
 // =====================================================
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
+app.use(
+    express.urlencoded({
+        extended: true
+    })
+);
 
 
 // =====================================================
-// Static files
-// index.html
-// script.js
-// style.css
-// etc.
+// Static frontend
 // =====================================================
 
-app.use(express.static(path.join(__dirname, "public")));
+app.use(
+    express.static(
+        path.join(__dirname, "public")
+    )
+);
 
 
 // =====================================================
-// Home Page
+// Home
 // =====================================================
 
 app.get("/", (req, res) => {
 
     res.sendFile(
-        path.join(__dirname,'public', "index.html")
+        path.join(
+            __dirname,
+            "public",
+            "index.html"
+        )
     );
 
 });
 
 
 // =====================================================
-// Kundali API
+// LOCATION AUTOCOMPLETE
 // =====================================================
 
-app.post("/api/kundali", async (req, res) => {
+app.get("/api/locations", async (req, res) => {
+console.log(process.env.GEOAPIFY_API_KEY);
 
     try {
 
-        console.log("Kundali request received:");
-
-        console.log(req.body);
-
-
-        const data = req.body;
+        const text =
+            String(
+                req.query.text || ""
+            ).trim();
 
 
-        // ---------------------------------------------
-        // Validation
-        // ---------------------------------------------
+        // Don't search for very short text
+        if (text.length < 2) {
 
-        if (!data.date) {
-
-            return res.status(400).json({
-                success: false,
-                message: "Date is required"
+            return res.json({
+                results: []
             });
 
         }
 
 
-        if (!data.time) {
+        const apiKey =
+            process.env.GEOAPIFY_API_KEY;
 
-            return res.status(400).json({
+
+        if (!apiKey) {
+
+            console.error(
+                "GEOAPIFY_API_KEY is not configured"
+            );
+
+
+            return res.status(500).json({
+
                 success: false,
-                message: "Time is required"
-            });
 
-        }
-
-
-        if (
-            data.latitude === undefined ||
-            data.longitude === undefined
-        ) {
-
-            return res.status(400).json({
-                success: false,
                 message:
-                    "Latitude and longitude are required"
+                    "Geoapify API key is not configured"
+
             });
 
         }
 
 
-        // ---------------------------------------------
-        // Default timezone
-        // India = UTC + 5:30
-        // ---------------------------------------------
+        // -------------------------------------------------
+        // India only
+        // -------------------------------------------------
 
-        if (
-            data.timezone === undefined ||
-            data.timezone === null
-        ) {
+        const url =
+            new URL(
+                "https://api.geoapify.com/v1/geocode/autocomplete"
+            );
 
-            data.timezone = 5.5;
+
+        url.searchParams.set(
+            "text",
+            text
+        );
+
+
+        url.searchParams.set(
+            "type",
+            "city"
+        );
+
+
+        url.searchParams.set(
+            "filter",
+            "countrycode:in"
+        );
+
+
+        url.searchParams.set(
+            "limit",
+            "8"
+        );
+
+
+        url.searchParams.set(
+            "format",
+            "json"
+        );
+
+
+        url.searchParams.set(
+            "apiKey",
+            apiKey
+        );
+
+
+        const response =
+            await fetch(url);
+
+
+        if (!response.ok) {
+
+            const errorText =
+                await response.text();
+
+
+            console.error(
+                "Geoapify error:",
+                errorText
+            );
+
+
+            return res.status(
+                response.status
+            ).json({
+
+                success: false,
+
+                message:
+                    "Location search failed"
+
+            });
 
         }
 
 
-        // ---------------------------------------------
-        // Generate Kundali
-        // ---------------------------------------------
-
-        const result =
-            await astrology.generate(data);
+        const data =
+            await response.json();
 
 
-        // ---------------------------------------------
-        // Send response
-        // ---------------------------------------------
+        // -------------------------------------------------
+        // Convert Geoapify response
+        // into our own simple format
+        // -------------------------------------------------
 
-        res.json(result);
+        const results =
+            (data.results || [])
+                .map(location => ({
+
+                    name:
+                        location.name ||
+                        location.city ||
+                        location.formatted,
+
+                    formatted:
+                        location.formatted,
+
+                    city:
+                        location.city || "",
+
+                    state:
+                        location.state || "",
+
+                    country:
+                        location.country || "",
+
+                    latitude:
+                        Number(
+                            location.lat
+                        ),
+
+                    longitude:
+                        Number(
+                            location.lon
+                        ),
+
+                    placeId:
+                        location.place_id || ""
+
+                }));
+
+
+        res.json({
+
+            success: true,
+
+            results
+
+        });
 
 
     } catch (error) {
 
         console.error(
-            "Kundali API Error:",
+            "Location API error:",
             error
         );
 
@@ -135,8 +241,7 @@ app.post("/api/kundali", async (req, res) => {
             success: false,
 
             message:
-                error.message ||
-                "Kundali calculation failed"
+                "Unable to search location"
 
         });
 
@@ -146,7 +251,127 @@ app.post("/api/kundali", async (req, res) => {
 
 
 // =====================================================
-// Render PORT
+// KUNDALI API
+// =====================================================
+
+app.post(
+    "/api/kundali",
+    async (req, res) => {
+
+        try {
+
+            console.log(
+                "Kundali request:",
+                req.body
+            );
+
+
+            const data =
+                req.body;
+
+
+            // ---------------------------------------------
+            // Validation
+            // ---------------------------------------------
+
+            if (!data.date) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Date is required"
+
+                });
+
+            }
+
+
+            if (!data.time) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Time is required"
+
+                });
+
+            }
+
+
+            if (
+                data.latitude === undefined ||
+                data.longitude === undefined
+            ) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Latitude and longitude are required"
+
+                });
+
+            }
+
+
+            // ---------------------------------------------
+            // India timezone
+            // ---------------------------------------------
+
+            if (
+                data.timezone === undefined ||
+                data.timezone === null
+            ) {
+
+                data.timezone = 5.5;
+
+            }
+
+
+            // ---------------------------------------------
+            // Generate Kundali
+            // ---------------------------------------------
+
+            const result =
+                await astrology.generate(
+                    data
+                );
+
+
+            res.json(result);
+
+
+        } catch (error) {
+
+            console.error(
+                "Kundali API Error:",
+                error
+            );
+
+
+            res.status(500).json({
+
+                success: false,
+
+                message:
+                    error.message ||
+                    "Kundali calculation failed"
+
+            });
+
+        }
+
+    }
+);
+
+
+// =====================================================
+// RENDER PORT
 // =====================================================
 
 const PORT =

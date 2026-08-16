@@ -1158,3 +1158,1729 @@ select{
 
 }
 
+
+
+/* ==========================================
+   D1 + D9 CHARTS
+   ========================================== */
+
+.centerCharts {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 30px;
+
+}
+
+
+.centerCharts > div {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+}
+
+
+.centerCharts h2 {
+
+    color: #8B4513;
+
+    margin-bottom: 10px;
+
+    text-align: center;
+
+}
+
+
+/* Navamsa chart */
+
+.navamsaKundali {
+
+    display: grid;
+
+}
+
+/* ================================= */
+/* MAIN HOROSCOPE LAYOUT */
+/* ================================= */
+
+.chartContainer {
+    display: grid;
+
+    grid-template-columns:
+        260px
+        minmax(500px, 1fr)
+        420px;
+
+    gap: 20px;
+
+    width: 100%;
+
+    align-items: start;
+
+    box-sizing: border-box;
+}
+
+
+/* ================================= */
+/* LEFT PANEL */
+/* ================================= */
+
+.leftPanel {
+    width: 100%;
+
+    box-sizing: border-box;
+}
+
+
+/* ================================= */
+/* CENTER PANEL */
+/* ================================= */
+
+.centerPanel {
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 30px;
+
+    align-items: center;
+
+    box-sizing: border-box;
+}
+
+
+/* ================================= */
+/* RASI KUNDALI */
+/* ================================= */
+
+#kundali {
+    width: 100%;
+
+    box-sizing: border-box;
+}
+
+
+/* ================================= */
+/* NAVAMSA SECTION */
+/* ================================= */
+
+.navamsaSection {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    text-align: center;
+}
+
+.navamsaSection h3 {
+    margin-bottom: 15px;
+}
+
+
+/* ================================= */
+/* NAVAMSA KUNDALI */
+/* ================================= */
+
+.navamsaKundali {
+    width: 100%;
+
+    box-sizing: border-box;
+}
+
+
+/* ================================= */
+/* RIGHT PANEL */
+/* ================================= */
+
+.rightPanel {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+}
+
+
+/* ================================= */
+/* DASHA CARD */
+/* ================================= */
+
+.dashaCard {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    overflow-x: auto;
+}
+
+
+/* ================================= */
+/* TABLES */
+/* ================================= */
+
+.dashaCard table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    table-layout: fixed;
+}
+
+.dashaCard td,
+.dashaCard th {
+    padding: 8px;
+
+    border: 1px solid #ccc;
+
+    text-align: left;
+
+    word-break: break-word;
+
+    vertical-align: top;
+}
+
+
+/* ================================= */
+/* RESPONSIVE */
+/* ================================= */
+
+@media (max-width: 1200px) {
+
+    .chartContainer {
+        grid-template-columns:
+            220px
+            minmax(400px, 1fr)
+            350px;
+
+        gap: 15px;
+    }
+
+}
+
+
+@media (max-width: 900px) {
+
+    .chartContainer {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .leftPanel,
+    .centerPanel,
+    .rightPanel {
+
+        width: 100%;
+
+    }
+
+}
+/* =========================================================
+   MAIN HOROSCOPE LAYOUT
+   ========================================================= */
+
+.chartContainer {
+
+    display: grid;
+
+    grid-template-columns:
+        280px
+        400px
+        280px;
+
+    justify-content: center;
+
+    align-items: start;
+
+    gap: 30px;
+
+    width: 100%;
+
+    margin-top: 25px;
+
+}
+
+
+/* =========================================================
+   LEFT PANEL - PANCHANG
+   ========================================================= */
+
+.leftPanel {
+
+    width: 280px;
+
+}
+
+
+.panchangCard {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    background: #fffdf5;
+
+    border: 2px solid #8B4513;
+
+    border-radius: 8px;
+
+    padding: 15px;
+
+    box-shadow:
+        0 3px 8px rgba(0, 0, 0, 0.15);
+
+    font-size: 14px;
+
+}
+
+
+.panchangCard h3 {
+
+    text-align: center;
+
+    color: #8B4513;
+
+    margin-top: 0;
+
+}
+
+
+.panchangCard table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+}
+
+
+.panchangCard td {
+
+    border: 1px solid #ddd;
+
+    padding: 6px;
+
+}
+
+
+.panchangCard td:first-child {
+
+    font-weight: bold;
+
+    background: #fff3cd;
+
+}
+
+
+/* =========================================================
+   CENTER PANEL
+   ========================================================= */
+
+.centerPanel {
+
+    width: 400px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 25px;
+
+}
+
+
+/* =========================================================
+   RASHI / D1 KUNDALI
+   ========================================================= */
+
+.kundali {
+
+    width: 380px;
+
+    height: 380px;
+
+    position: relative;
+
+    margin: 0;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 95px);
+
+    grid-template-rows:
+        repeat(4, 95px);
+
+    border: 2px solid #7b4a12;
+
+    background: #fffdf6;
+
+    box-shadow:
+        0 4px 10px rgba(0, 0, 0, 0.15);
+
+    box-sizing: border-box;
+
+}
+
+
+/* IMPORTANT:
+   Do NOT use:
+   left: -280px;
+*/
+
+
+/* =========================================================
+   CHART HOUSE
+   ========================================================= */
+
+.house {
+
+    border: 1px solid #6b3f13;
+
+    padding: 2px;
+
+    overflow: hidden;
+
+    background: white;
+
+    box-sizing: border-box;
+
+}
+
+
+.house h3 {
+
+    margin: 0;
+
+    font-size: 10px;
+
+    color: #8B4513;
+
+    text-align: center;
+
+    border-bottom: 1px solid #ddd;
+
+}
+
+
+.house p {
+
+    margin-top: 2px;
+
+    margin-bottom: 0;
+
+    text-align: center;
+
+    color: #1d4ed8;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    line-height: 12px;
+
+}
+
+
+/* =========================================================
+   CHART CENTER
+   ========================================================= */
+
+.center {
+
+    grid-column: 2 / 4;
+
+    grid-row: 2 / 4;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    flex-direction: column;
+
+    background: #fff8dc;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+}
+
+
+.center .emoji {
+
+    font-size: 16px;
+
+}
+
+
+/* =========================================================
+   LAGNA
+   ========================================================= */
+
+.lagna {
+
+    border: 2px solid red;
+
+    background: #fff3cd;
+
+}
+
+
+.lagnaLabel {
+
+    color: red;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    text-align: center;
+
+    margin-top: 2px;
+
+}
+
+
+/* =========================================================
+   NAVAMSA SECTION
+   ========================================================= */
+
+.navamsaSection {
+
+    width: 400px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+}
+
+
+.navamsaSection h3 {
+
+    margin: 0 0 12px 0;
+
+    color: #8B4513;
+
+    font-size: 18px;
+
+}
+
+
+.navamsaKundali {
+
+    width: 380px;
+
+    height: 380px;
+
+}
+
+
+/* =========================================================
+   RIGHT PANEL - DASHA
+   ========================================================= */
+
+.rightPanel {
+
+    width: 280px;
+
+}
+
+
+.dashaCard {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    background: #fffdf5;
+
+    border: 2px solid #8B4513;
+
+    border-radius: 8px;
+
+    padding: 15px;
+
+    box-shadow:
+        0 3px 8px rgba(0, 0, 0, 0.15);
+
+}
+
+
+.dashaCard h3 {
+
+    text-align: center;
+
+    color: #8B4513;
+
+    margin-top: 0;
+
+}
+
+
+.dashaCard table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+}
+
+
+.dashaCard td {
+
+    border: 1px solid #ddd;
+
+    padding: 6px;
+
+}
+
+
+.dashaCard td:first-child {
+
+    background: #fff3cd;
+
+    font-weight: bold;
+
+}
+
+
+/* =========================================================
+   PLANET DETAILS
+   ========================================================= */
+
+.planetDetailsCard {
+
+    width: 95%;
+
+    margin: 30px auto;
+
+    background: #fffdf5;
+
+    border: 2px solid #8B4513;
+
+    border-radius: 10px;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.15);
+
+}
+
+
+.planetDetailsCard h2 {
+
+    text-align: center;
+
+    color: #8B4513;
+
+    margin-top: 0;
+
+}
+
+
+/* =========================================================
+   PLANET TABLE
+   ========================================================= */
+
+.planetTableWrapper {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+}
+
+
+.planetDetailsTable {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    font-size: 13px;
+
+}
+
+
+.planetDetailsTable th {
+
+    background: #8B4513;
+
+    color: white;
+
+    padding: 9px;
+
+    border: 1px solid #ddd;
+
+    white-space: nowrap;
+
+}
+
+
+.planetDetailsTable td {
+
+    padding: 8px;
+
+    border: 1px solid #ddd;
+
+    text-align: center;
+
+    white-space: nowrap;
+
+}
+
+
+.planetDetailsTable tbody tr:nth-child(even) {
+
+    background: #fff8dc;
+
+}
+
+
+.planetName {
+
+    font-weight: bold;
+
+    color: #8B4513;
+
+}
+
+
+.planetSymbol {
+
+    font-size: 16px;
+
+    margin-right: 4px;
+
+}
+
+
+/* =========================================================
+   RETROGRADE
+   ========================================================= */
+
+.motionRetro {
+
+    color: #dc2626;
+
+    font-weight: bold;
+
+}
+
+
+.motionDirect {
+
+    color: #15803d;
+
+    font-weight: bold;
+
+}
+
+
+/* =========================================================
+   COMBUSTION
+   ========================================================= */
+
+.combustStatus {
+
+    color: #dc2626;
+
+    font-weight: bold;
+
+}
+
+
+.normalStatus {
+
+    color: #777;
+
+}
+
+
+/* =========================================================
+   MANDHI / LAGNA DETAILS
+   ========================================================= */
+
+.detailsCard {
+
+    width: 95%;
+
+    margin: 20px auto;
+
+    background: #fffdf5;
+
+    border: 2px solid #8B4513;
+
+    border-radius: 10px;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.15);
+
+}
+
+
+.detailsCard h2 {
+
+    text-align: center;
+
+    color: #8B4513;
+
+}
+
+
+/* =========================================================
+   DASHA UI
+   ========================================================= */
+
+.dashaHeader {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 15px;
+
+}
+
+
+.dashaOm {
+
+    font-size: 30px;
+
+}
+
+
+.dashaHeader h2 {
+
+    margin: 0;
+
+    font-size: 16px;
+
+    color: #8B4513;
+
+}
+
+
+.dashaHeader p {
+
+    margin: 3px 0 0;
+
+    font-size: 12px;
+
+    color: #777;
+
+}
+
+
+.currentDashaGrid {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 10px;
+
+}
+
+
+.currentDashaCard {
+
+    text-align: center;
+
+    background: #fff8dc;
+
+    border: 1px solid #d6b56d;
+
+    border-radius: 8px;
+
+    padding: 10px;
+
+}
+
+
+.activePeriod {
+
+    border: 2px solid #8B4513;
+
+}
+
+
+.periodLabel {
+
+    font-size: 10px;
+
+    color: #777;
+
+    font-weight: bold;
+
+}
+
+
+.planetLarge {
+
+    font-size: 28px;
+
+    margin: 5px 0;
+
+}
+
+
+.planetTitle {
+
+    font-weight: bold;
+
+    color: #8B4513;
+
+}
+
+
+.currentText {
+
+    font-size: 10px;
+
+    color: #15803d;
+
+    margin-top: 5px;
+
+}
+
+
+.dashaInfoGrid {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 8px;
+
+    margin-top: 12px;
+
+}
+
+
+.dashaInfoGrid > div {
+
+    background: white;
+
+    border: 1px solid #ddd;
+
+    border-radius: 5px;
+
+    padding: 7px;
+
+}
+
+
+.dashaInfoGrid span {
+
+    display: block;
+
+    font-size: 10px;
+
+    color: #777;
+
+}
+
+
+.dashaInfoGrid strong {
+
+    font-size: 12px;
+
+    color: #8B4513;
+
+}
+
+
+.dashaSection {
+
+    margin-top: 15px;
+
+}
+
+
+.sectionTitle {
+
+    font-weight: bold;
+
+    color: #8B4513;
+
+    margin-bottom: 8px;
+
+}
+
+
+.dashaSequence {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    align-items: center;
+
+    gap: 5px;
+
+}
+
+
+.mahaSequenceItem {
+
+    background: white;
+
+    border: 1px solid #d6b56d;
+
+    border-radius: 6px;
+
+    padding: 7px;
+
+    text-align: center;
+
+    min-width: 70px;
+
+}
+
+
+.mahaIcon {
+
+    font-size: 20px;
+
+}
+
+
+.mahaName {
+
+    font-weight: bold;
+
+    font-size: 11px;
+
+}
+
+
+.mahaDates {
+
+    font-size: 9px;
+
+    color: #777;
+
+}
+
+
+.sequenceArrow {
+
+    color: #8B4513;
+
+    font-weight: bold;
+
+}
+
+
+.bhukthiDetails {
+
+    margin-top: 5px;
+
+    font-size: 10px;
+
+}
+
+
+.bhukthiList {
+
+    margin-top: 5px;
+
+}
+
+
+.bhukthiRow {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 5px;
+
+    padding: 3px;
+
+    border-bottom: 1px solid #eee;
+
+}
+
+
+.noDashaData {
+
+    color: #777;
+
+    font-size: 12px;
+
+}
+
+
+/* =========================================================
+   LOCATION SEARCH
+   ========================================================= */
+
+.locationSearch {
+
+    position: relative;
+
+    flex: 1;
+
+}
+
+
+.locationSearch input {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+}
+
+
+.locationSuggestions {
+
+    position: absolute;
+
+    top: 100%;
+
+    left: 0;
+
+    right: 0;
+
+    z-index: 1000;
+
+    background: white;
+
+    border: 1px solid #ccc;
+
+    border-radius: 5px;
+
+    box-shadow:
+        0 4px 10px rgba(0,0,0,0.15);
+
+    display: none;
+
+    max-height: 250px;
+
+    overflow-y: auto;
+
+}
+
+
+.locationSuggestion {
+
+    padding: 10px;
+
+    cursor: pointer;
+
+    border-bottom: 1px solid #eee;
+
+}
+
+
+.locationSuggestion:hover {
+
+    background: #fff3cd;
+
+}
+
+
+.locationName {
+
+    font-weight: bold;
+
+    color: #8B4513;
+
+}
+
+
+.locationDetails {
+
+    font-size: 11px;
+
+    color: #777;
+
+    margin-top: 2px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    .chartContainer {
+
+        grid-template-columns:
+            1fr;
+
+        justify-items: center;
+
+    }
+
+
+    .leftPanel,
+    .centerPanel,
+    .rightPanel {
+
+        width: 400px;
+
+        max-width: 95%;
+
+    }
+
+
+    .centerPanel {
+
+        order: 1;
+
+    }
+
+
+    .leftPanel {
+
+        order: 2;
+
+    }
+
+
+    .rightPanel {
+
+        order: 3;
+
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .centerPanel {
+
+        width: 100%;
+
+    }
+
+
+    .kundali {
+
+        width: 320px;
+
+        height: 320px;
+
+        grid-template-columns:
+            repeat(4, 80px);
+
+        grid-template-rows:
+            repeat(4, 80px);
+
+    }
+
+
+    .navamsaKundali {
+
+        width: 320px;
+
+        height: 320px;
+
+    }
+
+
+    .navamsaSection {
+
+        width: 100%;
+
+    }
+
+
+    .leftPanel,
+    .rightPanel {
+
+        width: 95%;
+
+    }
+
+}
+
+ /* =========================================================
+   VARGA CARD
+   ========================================================= */
+
+.vargaCard {
+
+    width: 95%;
+
+    margin: 30px auto;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    background: #fffdf5;
+
+    border: 2px solid #8B4513;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,0.15);
+
+}
+
+
+.vargaCard h2 {
+
+    text-align: center;
+
+    color: #8B4513;
+
+    margin-top: 0;
+
+}
+
+
+/* =========================================================
+   VARGA SELECT
+   ========================================================= */
+
+.vargaControls {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.vargaControls label {
+
+    font-weight: bold;
+
+    color: #8B4513;
+
+}
+
+
+.vargaControls select {
+
+    padding: 8px 12px;
+
+    border: 1px solid #8B4513;
+
+    border-radius: 6px;
+
+    background: white;
+
+    font-size: 14px;
+
+}
+
+
+/* =========================================================
+   VARGA TABLE
+   ========================================================= */
+
+.vargaTableContainer {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+}
+
+
+.vargaTable {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+}
+
+
+.vargaTable th {
+
+    background: #8B4513;
+
+    color: white;
+
+    padding: 10px;
+
+    border: 1px solid #ddd;
+
+}
+
+
+.vargaTable td {
+
+    padding: 9px;
+
+    text-align: center;
+
+    border: 1px solid #ddd;
+
+}
+
+
+.vargaTable tbody tr:nth-child(even) {
+
+    background: #fff8dc;
+
+}
+
+
+.vargaPlanet {
+
+    font-weight: bold;
+
+    color: #8B4513;
+
+}
+
+
+.noVargaData {
+
+    text-align: center;
+
+    padding: 20px;
+
+    color: #777;
+
+}
+
+
+/* =========================================================
+   YOGA CARD
+   ========================================================= */
+
+.yogaCard {
+
+    width: 95%;
+
+    margin: 30px auto;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    background: #fffdf5;
+
+    border: 2px solid #8B4513;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,0.15);
+
+}
+
+
+.yogaCard h2 {
+
+    text-align: center;
+
+    color: #8B4513;
+
+    margin-top: 0;
+
+}
+
+
+/* =========================================================
+   YOGA GRID
+   ========================================================= */
+
+.yogaGrid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(260px, 1fr)
+        );
+
+    gap: 15px;
+
+}
+
+
+.singleYogaCard {
+
+    display: flex;
+
+    gap: 12px;
+
+    padding: 15px;
+
+    background: white;
+
+    border: 1px solid #d6b56d;
+
+    border-radius: 8px;
+
+    box-shadow:
+        0 2px 6px rgba(0,0,0,0.08);
+
+}
+
+
+.yogaIcon {
+
+    font-size: 28px;
+
+    min-width: 40px;
+
+    text-align: center;
+
+}
+
+
+.yogaContent h3 {
+
+    margin: 0;
+
+    color: #8B4513;
+
+    font-size: 16px;
+
+}
+
+
+.yogaContent p {
+
+    margin: 7px 0;
+
+    font-size: 13px;
+
+    line-height: 18px;
+
+    color: #444;
+
+}
+
+
+.yogaType {
+
+    display: inline-block;
+
+    margin-top: 4px;
+
+    padding: 3px 7px;
+
+    border-radius: 10px;
+
+    background: #fff3cd;
+
+    color: #8B4513;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+}
+
+
+.yogaPlanets {
+
+    font-size: 11px;
+
+    color: #555;
+
+    font-weight: bold;
+
+}
+
+
+.noYogaData {
+
+    padding: 20px;
+
+    text-align: center;
+
+    color: #777;
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .vargaControls {
+
+        flex-direction: column;
+
+    }
+
+
+    .vargaControls select {
+
+        width: 100%;
+
+    }
+
+
+    .vargaCard,
+    .yogaCard {
+
+        width: 95%;
+
+        padding: 12px;
+
+    }
+
+}
+
+
+/* =========================================================
+   SHADBALA CARD
+   ========================================================= */
+
+.shadbalaCard {
+
+    width: 95%;
+
+    margin: 30px auto;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    background: #fffdf5;
+
+    border: 2px solid #8B4513;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 4px 12px
+        rgba(0, 0, 0, 0.15);
+
+}
+
+
+.shadbalaCard h2 {
+
+    margin-top: 0;
+
+    text-align: center;
+
+    color: #8B4513;
+
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.shadbalaWrapper {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+}
+
+
+.shadbalaTable {
+
+    width: 100%;
+
+    min-width: 850px;
+
+    border-collapse: collapse;
+
+}
+
+
+.shadbalaTable th {
+
+    padding: 10px 7px;
+
+    background: #8B4513;
+
+    color: white;
+
+    border: 1px solid #ddd;
+
+    font-size: 12px;
+
+}
+
+
+.shadbalaTable td {
+
+    padding: 9px 7px;
+
+    text-align: center;
+
+    border: 1px solid #ddd;
+
+    font-size: 12px;
+
+}
+
+
+.shadbalaTable
+tbody tr:nth-child(even) {
+
+    background: #fff8dc;
+
+}
+
+
+.shadbalaPlanet {
+
+    font-weight: bold;
+
+    color: #8B4513;
+
+}
+
+
+.shadbalaTotal {
+
+    font-weight: bold;
+
+    font-size: 14px !important;
+
+}

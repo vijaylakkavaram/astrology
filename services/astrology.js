@@ -8,6 +8,19 @@ swe.set_ephe_path(
     path.join(__dirname, "ephe")
 );
 
+const {
+    detectYogas
+} = require("./yoga");
+
+const {
+    calculateVargas
+} = require("./varga");
+
+
+const {
+    calculateShadbala
+} = require("./shadbala");
+
 // Lahiri Ayanamsa
 swe.set_sid_mode(1, 0, 0);
 
@@ -756,6 +769,107 @@ function calculateMandhi(
 
     };
 }
+// ==========================================
+// NAVAMSA / D9
+// ==========================================
+
+function getNavamsaSign(longitude) {
+
+    longitude = normalize(longitude);
+
+    const signIndex =
+        Math.floor(longitude / 30);
+
+    const degreeInSign =
+        longitude % 30;
+
+    // Each Navamsa = 3°20'
+    const navamsaSize =
+        30 / 9;
+
+    const navamsaIndex =
+        Math.floor(
+            degreeInSign / navamsaSize
+        );
+
+
+    // Movable signs
+    // Mesha, Karka, Tula, Makara
+    const movable = [
+        0, 3, 6, 9
+    ];
+
+
+    // Fixed signs
+    // Vrishabha, Simha, Vrishchika, Kumbha
+    const fixed = [
+        1, 4, 7, 10
+    ];
+
+
+    // Dual signs
+    // Mithuna, Kanya, Dhanu, Meena
+    const dual = [
+        2, 5, 8, 11
+    ];
+
+
+    let startSign;
+
+
+    if (movable.includes(signIndex)) {
+
+        startSign = signIndex;
+
+    }
+    else if (fixed.includes(signIndex)) {
+
+        startSign =
+            (signIndex + 8) % 12;
+
+    }
+    else if (dual.includes(signIndex)) {
+
+        startSign =
+            (signIndex + 4) % 12;
+
+    }
+
+
+    const navamsaSignIndex =
+        (
+            startSign +
+            navamsaIndex
+        ) % 12;
+
+
+    return {
+
+        sign:
+            rashis[
+                navamsaSignIndex
+            ],
+
+        signIndex:
+            navamsaSignIndex,
+
+        navamsaNumber:
+            navamsaIndex + 1,
+
+        degreeInNavamsa:
+            Number(
+                (
+                    degreeInSign -
+                    (
+                        navamsaIndex *
+                        navamsaSize
+                    )
+                ).toFixed(4)
+            )
+
+    };
+
+}
 
 
 // ==========================================
@@ -765,25 +879,17 @@ function calculateMandhi(
 async function generate(data) {
 
     const {
-
         name,
-
         date,
-
         time,
-
         latitude,
-
         longitude,
-
         timezone
-
     } = data;
-
-
-    // --------------------------------------
-    // Date / Time
-    // --------------------------------------
+ 
+    // ======================================
+    // DATE / TIME
+    // ======================================
 
     const [year, month, day] =
         date
@@ -797,19 +903,15 @@ async function generate(data) {
             .map(Number);
 
 
-    // --------------------------------------
-    // Local -> UTC
-    // --------------------------------------
-
     const hourUTC =
         hour +
         minute / 60 -
         Number(timezone);
 
 
-    // --------------------------------------
-    // Julian Day
-    // --------------------------------------
+    // ======================================
+    // JULIAN DAY
+    // ======================================
 
     const jd =
         swe.julday(
@@ -824,9 +926,9 @@ async function generate(data) {
     let kundali = {};
 
 
-    // --------------------------------------
-    // Flags
-    // --------------------------------------
+    // ======================================
+    // FLAGS
+    // ======================================
 
     const flags =
         65536 | 256;
@@ -858,8 +960,22 @@ async function generate(data) {
             );
 
 
+        // ==================================
+        // NAKSHATRA
+        // ==================================
+
         const nakshatra =
             getNakshatra(
+                planetLongitude
+            );
+
+
+        // ==================================
+        // NAVAMSA
+        // ==================================
+
+        const navamsa =
+            getNavamsaSign(
                 planetLongitude
             );
 
@@ -870,17 +986,21 @@ async function generate(data) {
                 planetLongitude
             ),
 
+
             longitude:
                 planetLongitude,
 
+
             speed,
+
 
             retrograde:
                 speed < 0,
 
-            // =================================
-            // NAKSHATRA DETAILS
-            // =================================
+
+            // ==============================
+            // NAKSHATRA
+            // ==============================
 
             nakshatra:
                 nakshatra.nakshatra,
@@ -898,8 +1018,26 @@ async function generate(data) {
                 nakshatra.pada,
 
             nakshatraIndex:
-                nakshatra.nakshatraIndex
+                nakshatra.nakshatraIndex,
 
+
+            // ==============================
+            // NAVAMSA / D9
+            // ==============================
+
+            navamsaRashi:
+                navamsa.sign,
+
+            navamsaSignIndex:
+                navamsa.signIndex,
+
+            navamsaNumber:
+                navamsa.navamsaNumber,
+
+            degreeInNavamsa:
+                navamsa.degreeInNavamsa,
+
+                 
         };
 
     }
@@ -976,21 +1114,36 @@ async function generate(data) {
         );
 
 
+    // IMPORTANT:
+    // Calculate Ketu Navamsa separately
+    const ketuNavamsa =
+        getNavamsaSign(
+            ketuLongitude
+        );
+
+
     kundali.Ketu = {
 
         ...rashiPosition(
             ketuLongitude
         ),
 
+
         longitude:
             ketuLongitude,
+
 
         speed:
             kundali.Rahu.speed,
 
-        retrograde: true,
 
-        combust: false,
+        retrograde:
+            true,
+
+
+        combust:
+            false,
+
 
         sunDistance:
             getAngularDistance(
@@ -998,9 +1151,10 @@ async function generate(data) {
                 sunLongitude
             ),
 
-        // =================================
-        // KETU NAKSHATRA DETAILS
-        // =================================
+
+        // ==============================
+        // KETU NAKSHATRA
+        // ==============================
 
         nakshatra:
             ketuNakshatra.nakshatra,
@@ -1018,7 +1172,24 @@ async function generate(data) {
             ketuNakshatra.pada,
 
         nakshatraIndex:
-            ketuNakshatra.nakshatraIndex
+            ketuNakshatra.nakshatraIndex,
+
+
+        // ==============================
+        // KETU NAVAMSA
+        // ==============================
+
+        navamsaRashi:
+            ketuNavamsa.sign,
+
+        navamsaSignIndex:
+            ketuNavamsa.signIndex,
+
+        navamsaNumber:
+            ketuNavamsa.navamsaNumber,
+
+        degreeInNavamsa:
+            ketuNavamsa.degreeInNavamsa
 
     };
 
@@ -1061,6 +1232,16 @@ async function generate(data) {
         );
 
 
+    // ======================================
+    // NAVAMSA LAGNA
+    // ======================================
+
+    const navamsaLagna =
+        getNavamsaSign(
+            siderealLagna
+        );
+
+
     const lagnaNakshatra =
         getNakshatra(
             siderealLagna
@@ -1073,12 +1254,14 @@ async function generate(data) {
             siderealLagna
         ),
 
+
         longitude:
             siderealLagna,
 
-        // =================================
-        // LAGNA NAKSHATRA DETAILS
-        // =================================
+
+        // ==============================
+        // LAGNA NAKSHATRA
+        // ==============================
 
         nakshatra:
             lagnaNakshatra.nakshatra,
@@ -1096,7 +1279,24 @@ async function generate(data) {
             lagnaNakshatra.pada,
 
         nakshatraIndex:
-            lagnaNakshatra.nakshatraIndex
+            lagnaNakshatra.nakshatraIndex,
+
+
+        // ==============================
+        // LAGNA NAVAMSA
+        // ==============================
+
+        navamsaRashi:
+            navamsaLagna.sign,
+
+        navamsaSignIndex:
+            navamsaLagna.signIndex,
+
+        navamsaNumber:
+            navamsaLagna.navamsaNumber,
+
+        degreeInNavamsa:
+            navamsaLagna.degreeInNavamsa
 
     };
 
@@ -1144,7 +1344,9 @@ async function generate(data) {
     for (const planet in kundali) {
 
         if (planet === "Lagna") {
+
             continue;
+
         }
 
 
@@ -1161,7 +1363,9 @@ async function generate(data) {
 
 
         if (house <= 0) {
+
             house += 12;
+
         }
 
 
@@ -1197,9 +1401,10 @@ async function generate(data) {
                     ).toFixed(4)
                 ),
 
-            // =================================
-            // NAKSHATRA DETAILS
-            // =================================
+
+            // ==============================
+            // NAKSHATRA
+            // ==============================
 
             nakshatra:
                 kundali[planet].nakshatra,
@@ -1211,7 +1416,8 @@ async function generate(data) {
                 kundali[planet].subLord,
 
             sookshmaDaipathi:
-                kundali[planet].sookshmaDaipathi,
+                kundali[planet]
+                    .sookshmaDaipathi,
 
             pada:
                 kundali[planet].pada,
@@ -1220,9 +1426,31 @@ async function generate(data) {
                 kundali[planet]
                     .nakshatraIndex,
 
-            // =================================
+
+            // ==============================
+            // NAVAMSA / D9
+            // ==============================
+
+            navamsaRashi:
+                kundali[planet]
+                    .navamsaRashi,
+
+            navamsaSignIndex:
+                kundali[planet]
+                    .navamsaSignIndex,
+
+            navamsaNumber:
+                kundali[planet]
+                    .navamsaNumber,
+
+            degreeInNavamsa:
+                kundali[planet]
+                    .degreeInNavamsa,
+
+
+            // ==============================
             // MANDHI
-            // =================================
+            // ==============================
 
             mandhi
 
@@ -1237,13 +1465,9 @@ async function generate(data) {
 
     const panchangData =
         panchang.calculate(
-
             kundali.Sun.longitude,
-
             kundali.Moon.longitude,
-
             date
-
         );
 
 
@@ -1253,21 +1477,67 @@ async function generate(data) {
 
     const dashaData =
         dasha.calculate(
-
             kundali.Moon.longitude,
-
             date
-
         );
 
+        // ======================================
+// SHADBALA
+// ======================================
+
+const shadbalaData =
+    calculateShadbala(
+
+        kundali,
+
+        planetsData,
+
+        `${date}T${time}:00`
+
+    );
+
+console.log(
+    "SHADBALA:",
+    shadbalaData
+);
+
+// ======================================
+// VARGA CHARTS
+// ======================================
+
+const vargaData =
+   await  calculateVargas(
+        kundali
+    );
+
+console.log(
+    "VARGA DATA:",
+    vargaData
+);
+
+
+// ======================================
+// YOGA DETECTION
+// ======================================
+
+const yogaData =
+    detectYogas(
+        kundali
+    );
+
+console.log(
+    "YOGA DATA:",
+    yogaData
+);
 
     // ======================================
-    // RETURN
+    // FINAL RESPONSE
     // ======================================
 
     return {
 
         name,
+
 
         birth: {
 
@@ -1284,51 +1554,66 @@ async function generate(data) {
         },
 
 
-        // =================================
-        // LAGNA
-        // =================================
+        // ==============================
+        // D1 LAGNA
+        // ==============================
 
         lagna:
             kundali.Lagna,
 
 
-        // =================================
+        // ==============================
         // PLANETS
-        // =================================
+        // ==============================
 
         planets:
             planetsData,
 
 
-        // =================================
+        // ==============================
         // PANCHANG
-        // =================================
+        // ==============================
 
         panchang:
             panchangData,
 
 
-        // =================================
+        // ==============================
         // DASHA
-        // =================================
+        // ==============================
 
         dasha:
             dashaData,
 
 
-        // =================================
+        // ==============================
         // MANDHI
-        // =================================
+        // ==============================
 
-        // mandhi:
+        mandhi,
 
-        //     mandhi
+
+    // ======================================
+    // VARGA
+    // ======================================
+
+    // vargas:
+    //     vargaData,
+
+
+    // ======================================
+    // YOGA
+    // ======================================
+
+    yogas:
+        yogaData
 
     };
 
+    shadbala:
+        shadbalaData
+
 }
-
-
 // ==========================================
 // EXPORT
 // ==========================================

@@ -221,42 +221,145 @@
     <!-- ========================= -->
     <!-- MAIN HOROSCOPE LAYOUT -->
     <!-- ========================= -->
+<!-- ========================= -->
+<!-- MAIN HOROSCOPE LAYOUT -->
+<!-- ========================= -->
 
-    <div class="chartContainer">
+<div class="chartContainer">
 
+    <!-- ========================= -->
+    <!-- LEFT PANEL -->
+    <!-- ========================= -->
 
-        <!-- LEFT -->
-        <div class="leftPanel">
+    <div class="leftPanel" >
 
-            <div
-                id="panchangCard"
-                class="panchangCard">
-            </div>
-
-        </div>
-
-
-        <!-- CENTER -->
         <div
-            id="kundali"
-            class="kundali"
-            style="display:none;">
-
-        </div>
-
-
-        <!-- RIGHT -->
-        <div class="rightPanel">
-
-            <div
-                id="dashaCard"
-                class="dashaCard">
-            </div>
-
+            id="panchangCard"
+            class="panchangCard">
         </div>
 
     </div>
 
+
+    <!-- ========================= -->
+    <!-- CENTER PANEL -->
+    <!-- ========================= -->
+
+    <div class="centerPanel">
+
+        <!-- RASI / D1 -->
+        <div
+            id="kundali"
+            class="kundali"
+            style="display:none;">
+        </div>
+
+
+        <!-- NAVAMSA / D9 -->
+        <div class="navamsaSection">
+
+            <h3>Navamsa / D9</h3>
+
+            <div
+                id="navamsaKundali"
+                class="kundali navamsaKundali">
+            </div>
+
+        </div>
+<!--         
+<div class="vargaSection">
+
+    <h2>📊 Divisional Charts</h2>
+
+    <select id="vargaSelect">
+
+        <option value="D1">
+            D1 - Rashi
+        </option>
+
+        <option value="D2">
+            D2 - Hora
+        </option>
+
+        <option value="D3">
+            D3 - Drekkana
+        </option>
+
+        <option value="D7">
+            D7 - Saptamsa
+        </option>
+
+        <option value="D9">
+            D9 - Navamsa
+        </option>
+
+        <option value="D10">
+            D10 - Dasamsa
+        </option>
+
+        <option value="D12">
+            D12 - Dwadashamsa
+        </option>
+
+        <option value="D16">
+            D16 - Shodasamsa
+        </option>
+
+        <option value="D20">
+            D20 - Vimshamsa
+        </option>
+
+        <option value="D24">
+            D24 - Chaturvimshamsa
+        </option>
+
+        <option value="D27">
+            D27 - Bhamsa
+        </option>
+
+        <option value="D30">
+            D30 - Trimsamsa
+        </option>
+
+        <option value="D40">
+            D40 - Khavedamsa
+        </option>
+
+        <option value="D45">
+            D45 - Akshavedamsa
+        </option>
+
+        <option value="D60">
+            D60 - Shashtiamsa
+        </option>
+
+    </select>
+
+
+    <div
+        id="vargaChart"
+        class="kundali">
+    </div>
+
+</div> -->
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- RIGHT PANEL -->
+    <!-- ========================= -->
+
+    <div class="rightPanel">
+
+        <div
+            id="dashaCard"
+            class="dashaCard">
+        </div>
+
+    </div>
+
+</div>
 
     <!-- ========================= -->
     <!-- PLANET DETAILS -->
@@ -268,7 +371,39 @@
         style="display:none;">
 
     </div>
+<!-- ========================= -->
+<!-- SHADBALA -->
+<!-- ========================= -->
 
+<div
+    id="shadbalaCard"
+    class="shadbalaCard"
+    style="display:none;">
+
+</div>
+
+<!-- ========================= -->
+<!-- VARGA CHARTS -->
+<!-- ========================= -->
+<!-- 
+<div
+    id="vargaCard"
+    class="vargaCard"
+    style="display:none;">
+
+</div> -->
+
+
+<!-- ========================= -->
+<!-- YOGA DETAILS -->
+<!-- ========================= -->
+
+<div
+    id="yogaCard"
+    class="yogaCard"
+    style="display:none;">
+
+</div>
 
 </div>
 

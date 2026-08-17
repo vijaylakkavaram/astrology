@@ -3,6 +3,7 @@ const panchang = require("./panchang");
 const dasha = require("./dasha");
 
 const path = require("path");
+const dosha = require("./dosha");
 
 swe.set_ephe_path(
     path.join(__dirname, "ephe")
@@ -1529,6 +1530,20 @@ console.log(
     "YOGA DATA:",
     yogaData
 );
+// ======================================
+// DOSHA DETECTION
+// ======================================
+
+const doshaData =
+    dosha.calculateDoshas(
+        kundali,
+        planetsData
+    );
+
+console.log(
+    "DOSHA DATA:",
+    doshaData
+);
 
     // ======================================
     // FINAL RESPONSE
@@ -1597,8 +1612,8 @@ console.log(
     // VARGA
     // ======================================
 
-    // vargas:
-    //     vargaData,
+    vargas:
+        vargaData,
 
 
     // ======================================
@@ -1606,12 +1621,16 @@ console.log(
     // ======================================
 
     yogas:
-        yogaData
+        yogaData,
 
-    };
 
     shadbala:
-        shadbalaData
+        shadbalaData,
+        doshas:
+    doshaData
+    
+
+    };
 
 }
 // ==========================================

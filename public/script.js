@@ -521,6 +521,7 @@ function renderAll(data) {
         renderShadbala(data);
 
 
+renderDoshas(data.doshas);
 
 }
 
@@ -3710,4 +3711,404 @@ function createShadbalaRow(
 
     `;
 
+}function renderDoshas(doshaData) {
+
+    const section =
+        document.getElementById(
+            "doshasSection"
+        );
+
+    const container =
+        document.getElementById(
+            "doshasContainer"
+        );
+
+    const summary =
+        document.getElementById(
+            "doshasSummary"
+        );
+
+
+    // -------------------------------------------------
+    // Reset
+    // -------------------------------------------------
+
+    if (!section || !container || !summary) {
+
+        console.warn(
+            "Dosha frontend elements not found"
+        );
+
+        return;
+
+    }
+
+
+    container.innerHTML = "";
+    summary.innerHTML = "";
+
+
+    // -------------------------------------------------
+    // No data
+    // -------------------------------------------------
+
+    if (
+        !doshaData ||
+        !doshaData.doshas
+    ) {
+
+        section.style.display =
+            "none";
+
+        return;
+
+    }
+
+
+    const doshas =
+        doshaData.doshas;
+
+
+    const detected =
+        doshaData.summary?.detected || [];
+
+
+    // -------------------------------------------------
+    // Summary
+    // -------------------------------------------------
+
+    const total =
+        doshaData.summary?.totalDetected || 0;
+
+
+    const summaryElement =
+        document.createElement("div");
+
+
+    summaryElement.className =
+        "dosha-summary";
+
+
+    summaryElement.innerHTML = `
+        <strong>
+            ${total}
+            Dosha${total === 1 ? "" : "s"}
+            detected
+        </strong>
+    `;
+
+
+    summary.appendChild(
+        summaryElement
+    );
+
+
+    // -------------------------------------------------
+    // Dosha definitions
+    // -------------------------------------------------
+
+    const definitions = [
+
+        {
+            key: "manglik",
+            name: "Manglik / Kuja Dosha",
+            icon: "🔴"
+        },
+
+        {
+            key: "kaalSarp",
+            name: "Kaal Sarp Dosha",
+            icon: "🐍"
+        },
+
+        {
+            key: "guruChandal",
+            name: "Guru Chandal Dosha",
+            icon: "🪐"
+        },
+
+        {
+            key: "grahan",
+            name: "Grahan Dosha",
+            icon: "🌑"
+        },
+
+        {
+            key: "shrapit",
+            name: "Shrapit Dosha",
+            icon: "⚫"
+        },
+
+        {
+            key: "pitru",
+            name: "Pitru Dosha",
+            icon: "🕉️"
+        },
+
+        {
+            key: "kemadruma",
+            name: "Kemadruma Dosha",
+            icon: "🌙"
+        }
+
+    ];
+
+
+    // -------------------------------------------------
+    // Create cards
+    // -------------------------------------------------
+
+    definitions.forEach(
+        definition => {
+
+            const data =
+                doshas[
+                    definition.key
+                ];
+
+
+            if (!data) {
+                return;
+            }
+
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                data.present
+                    ? "dosha-card dosha-present"
+                    : "dosha-card dosha-absent";
+
+
+            const status =
+                data.present
+                    ? "Present"
+                    : "Not Present";
+
+
+            let details = "";
+
+
+            // -----------------------------------------
+            // Manglik
+            // -----------------------------------------
+
+            if (
+                definition.key ===
+                "manglik"
+            ) {
+
+                details = `
+
+                    <div class="dosha-details">
+
+                        <div>
+                            From Lagna:
+                            <strong>
+                                ${data.fromLagna ? "Yes" : "No"}
+                            </strong>
+                        </div>
+
+                        <div>
+                            From Moon:
+                            <strong>
+                                ${data.fromMoon ? "Yes" : "No"}
+                            </strong>
+                        </div>
+
+                        <div>
+                            From Venus:
+                            <strong>
+                                ${data.fromVenus ? "Yes" : "No"}
+                            </strong>
+                        </div>
+
+                        ${
+                            data.severity !== "none"
+                                ? `
+                                <div>
+                                    Severity:
+                                    <strong>
+                                        ${data.severity}
+                                    </strong>
+                                </div>
+                                `
+                                : ""
+                        }
+
+                    </div>
+
+                `;
+
+            }
+
+
+            // -----------------------------------------
+            // Grahan
+            // -----------------------------------------
+
+            if (
+                definition.key ===
+                "grahan"
+            ) {
+
+                details = `
+
+                    <div class="dosha-details">
+
+                        <div>
+                            Solar:
+                            <strong>
+                                ${data.solar ? "Yes" : "No"}
+                            </strong>
+                        </div>
+
+                        <div>
+                            Lunar:
+                            <strong>
+                                ${data.lunar ? "Yes" : "No"}
+                            </strong>
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+
+
+            // -----------------------------------------
+            // Kaal Sarp
+            // -----------------------------------------
+
+            if (
+                definition.key ===
+                "kaalSarp"
+            ) {
+
+                if (data.type) {
+
+                    details = `
+
+                        <div class="dosha-details">
+
+                            <div>
+                                Type:
+                                <strong>
+                                    ${data.type}
+                                </strong>
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+            }
+
+
+            // -----------------------------------------
+            // Kemadruma
+            // -----------------------------------------
+
+            if (
+                definition.key ===
+                "kemadruma"
+            ) {
+
+                details = `
+
+                    <div class="dosha-details">
+
+                        <div>
+                            Moon House:
+                            <strong>
+                                ${data.moonHouse ?? "-"}
+                            </strong>
+                        </div>
+
+                        <div>
+                            Cancelled:
+                            <strong>
+                                ${data.cancelled ? "Yes" : "No"}
+                            </strong>
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+
+
+            // -----------------------------------------
+            // Generic reason
+            // -----------------------------------------
+
+            const reason =
+                data.reason || "";
+
+
+            card.innerHTML = `
+
+                <div class="dosha-card-header">
+
+                    <div class="dosha-title">
+
+                        <span>
+                            ${definition.icon}
+                        </span>
+
+                        <strong>
+                            ${definition.name}
+                        </strong>
+
+                    </div>
+
+                    <span
+                        class="dosha-status"
+                    >
+                        ${status}
+                    </span>
+
+                </div>
+
+
+                ${details}
+
+
+                ${
+                    reason
+                        ? `
+                        <div class="dosha-reason">
+                            ${reason}
+                        </div>
+                        `
+                        : ""
+                }
+
+            `;
+
+
+            container.appendChild(
+                card
+            );
+
+        }
+    );
+
+
+    // -------------------------------------------------
+    // Finally show section
+    // -------------------------------------------------
+
+    section.style.display =
+        "block";
+
 }
+

@@ -2884,3 +2884,148 @@ tbody tr:nth-child(even) {
     font-size: 14px !important;
 
 }
+
+/* =====================================================
+   DOSHAS
+===================================================== */
+
+.doshas-container {
+    display: grid;
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(280px, 1fr)
+        );
+
+    gap: 16px;
+
+    margin-top: 20px;
+}
+
+
+.dosha-summary {
+
+    padding: 12px 16px;
+
+    margin-bottom: 16px;
+
+    border-radius: 8px;
+
+    background: #f5f5f5;
+
+}
+
+
+.dosha-card {
+
+    padding: 18px;
+
+    border-radius: 12px;
+
+    border: 1px solid #ddd;
+
+    background: #fff;
+
+    box-shadow:
+        0 2px 8px
+        rgba(0, 0, 0, 0.08);
+
+}
+
+
+.dosha-present {
+
+    border-left:
+        5px solid #d32f2f;
+
+}
+
+
+.dosha-absent {
+
+    border-left:
+        5px solid #388e3c;
+
+}
+
+
+.dosha-card-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-bottom: 14px;
+
+}
+
+
+.dosha-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    font-size: 16px;
+
+}
+
+
+.dosha-status {
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+
+}
+
+
+.dosha-present .dosha-status {
+
+    color: #d32f2f;
+
+}
+
+
+.dosha-absent .dosha-status {
+
+    color: #388e3c;
+
+}
+
+
+.dosha-details {
+
+    display: grid;
+
+    gap: 7px;
+
+    margin-bottom: 12px;
+
+    font-size: 14px;
+
+}
+
+
+.dosha-reason {
+
+    padding-top: 12px;
+
+    border-top:
+        1px solid #eee;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+    color: #555;
+
+}

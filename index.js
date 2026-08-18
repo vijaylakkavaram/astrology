@@ -42,7 +42,7 @@ app.get("/", (req, res) => {
         path.join(
             __dirname,
             "public",
-            "dashboard.html"
+            "index.html"
         )
     );
 

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Muhurat Finder - Date Range</title>
+
+    <link
+        rel="stylesheet"
+        href="/style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🪔 Find Auspicious Muhurats</h1>
+
+    <div class="muhurat-form">
+
+        <label>
+            Start Date
+        </label>
+
+        <input
+            type="date"
+            id="startDate">
+
+
+        <label>
+            Search Days
+        </label>
+
+        <input
+            type="number"
+            id="days"
+            value="30"
+            min="1"
+            max="365">
+
+
+        <label>
+            Muhurat Type
+        </label>
+
+        <select id="muhuratType">
+
+            <option value="marriage">
+                Marriage
+            </option>
+
+            <option value="grihaPravesh">
+                Griha Pravesh
+            </option>
+
+            <option value="vehicle">
+                Vehicle Purchase
+            </option>
+
+            <option value="property">
+                Property Purchase
+            </option>
+
+            <option value="naming">
+                Naming Ceremony
+            </option>
+
+            <option value="general">
+                General
+            </option>
+
+        </select>
+
+
+        <label>
+            Latitude
+        </label>
+
+        <input
+            type="number"
+            id="latitude"
+            step="any"
+            value="13.6288">
+
+
+        <label>
+            Longitude
+        </label>
+
+        <input
+            type="number"
+            id="longitude"
+            step="any"
+            value="79.4192">
+
+
+        <label>
+            Timezone
+        </label>
+
+        <input
+            type="text"
+            id="timezone"
+            value="Asia/Kolkata">
+
+
+        <button id="searchButton">
+            Find Muhurats
+        </button>
+
+    </div>
+
+
+    <div
+        id="loading"
+        style="display:none">
+
+        Searching...
+
+    </div>
+
+
+    <div
+        id="error"
+        class="error"
+        style="display:none">
+    </div>
+
+
+    <div
+        id="summary"
+        style="display:none">
+
+        <h2>
+            Search Results
+        </h2>
+
+        <p id="summaryText"></p>
+
+    </div>
+
+
+    <div
+        id="results"
+        style="display:none">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Date</th>
+                    <th>Weekday</th>
+                    <th>Tithi</th>
+                    <th>Nakshatra</th>
+                    <th>Yoga</th>
+                    <th>Sunrise</th>
+                    <th>Sunset</th>
+                    <th>Abhijit</th>
+                    <th>Score</th>
+                    <th>Quality</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="resultsBody">
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<script src="/muhurat-range.js"></script>
+
+</body>
+
+</html>

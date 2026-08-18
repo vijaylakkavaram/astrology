@@ -368,6 +368,18 @@ app.post(
 
     }
 );
+const muhuratRoutes = require("../horoscope/routes/muhurat");
+
+app.use(
+    "/api/muhurat",
+    muhuratRoutes
+);
+
+app.get("/dashboard", (req, res) => {
+    res.sendFile(
+        path.join(__dirname, "public", "dashboard.html")
+    );
+});
 
 
 // =====================================================

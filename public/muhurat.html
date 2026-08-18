@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Muhurat Finder</title>
+
+    <link
+        rel="stylesheet"
+        href="/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🪔 Muhurat Finder</h1>
+
+    <div class="muhurat-form">
+
+        <label>
+            Date
+        </label>
+
+        <input
+            type="date"
+            id="muhuratDate">
+
+        <label>
+            Muhurat Type
+        </label>
+
+        <select id="muhuratType">
+
+            <option value="marriage">
+                Marriage
+            </option>
+
+            <option value="grihaPravesh">
+                Griha Pravesh
+            </option>
+
+            <option value="vehicle">
+                Vehicle Purchase
+            </option>
+
+            <option value="property">
+                Property Purchase
+            </option>
+
+            <option value="naming">
+                Naming Ceremony
+            </option>
+
+            <option value="general">
+                General
+            </option>
+
+        </select>
+
+
+        <label>
+            Latitude
+        </label>
+
+        <input
+            type="number"
+            id="latitude"
+            step="any"
+            value="13.6288">
+
+
+        <label>
+            Longitude
+        </label>
+
+        <input
+            type="number"
+            id="longitude"
+            step="any"
+            value="79.4192">
+
+
+        <label>
+            Timezone
+        </label>
+
+        <input
+            type="text"
+            id="timezone"
+            value="Asia/Kolkata">
+
+
+        <button
+            id="calculateButton">
+
+            Find Muhurat
+
+        </button>
+
+    </div>
+
+
+    <div
+        id="loading"
+        style="display:none">
+
+        Calculating...
+
+    </div>
+
+
+    <div
+        id="error"
+        class="error"
+        style="display:none">
+    </div>
+
+
+    <div
+        id="result"
+        style="display:none">
+
+
+        <h2>
+            Panchanga
+        </h2>
+
+
+        <div class="cards">
+
+            <div class="card">
+                <strong>Vara</strong>
+                <span id="vara"></span>
+            </div>
+
+            <div class="card">
+                <strong>Tithi</strong>
+                <span id="tithi"></span>
+            </div>
+
+            <div class="card">
+                <strong>Nakshatra</strong>
+                <span id="nakshatra"></span>
+            </div>
+
+            <div class="card">
+                <strong>Yoga</strong>
+                <span id="yoga"></span>
+            </div>
+
+            <div class="card">
+                <strong>Karana</strong>
+                <span id="karana"></span>
+            </div>
+
+        </div>
+
+
+        <h2>
+            Day Timings
+        </h2>
+
+
+        <table>
+
+            <tr>
+                <td>Sunrise</td>
+                <td id="sunrise"></td>
+            </tr>
+
+            <tr>
+                <td>Sunset</td>
+                <td id="sunset"></td>
+            </tr>
+
+            <tr>
+                <td>Rahu Kalam</td>
+                <td id="rahu"></td>
+            </tr>
+
+            <tr>
+                <td>Yamaganda</td>
+                <td id="yamaganda"></td>
+            </tr>
+
+            <tr>
+                <td>Gulika Kalam</td>
+                <td id="gulika"></td>
+            </tr>
+
+            <tr>
+                <td>Abhijit Muhurat</td>
+                <td id="abhijit"></td>
+            </tr>
+
+        </table>
+
+
+        <h2>
+            Choghadiya
+        </h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Name</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Status</th>
+                </tr>
+
+            </thead>
+
+            <tbody
+                id="choghadiya">
+            </tbody>
+
+        </table>
+
+
+        <h2>
+            Muhurat Evaluation
+        </h2>
+
+
+        <div class="score-card">
+
+            <div>
+                Score:
+                <strong id="score"></strong>
+                / 100
+            </div>
+
+            <div>
+                Quality:
+                <strong id="quality"></strong>
+            </div>
+
+        </div>
+
+
+        <h3>
+            Positive Factors
+        </h3>
+
+        <ul id="reasons"></ul>
+
+
+        <h3>
+            Warnings
+        </h3>
+
+        <ul id="warnings"></ul>
+
+    </div>
+
+</div>
+
+
+<script src="/muhurat.js"></script>
+
+</body>
+
+</html>

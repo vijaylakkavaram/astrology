@@ -368,7 +368,7 @@ app.post(
 
     }
 );
-const muhuratRoutes = require("../horoscope/routes/muhurat");
+const muhuratRoutes = require("./routes/muhurat");
 
 app.use(
     "/api/muhurat",
